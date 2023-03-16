@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import session from "express-session";
 import Sequelize from "sequelize";
-import redis from "redis";
 
 dotenv.config();
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
@@ -10,9 +9,9 @@ let sequelize;
 
 if (process.env.NODE_ENV === "development") {
   sequelize = new Sequelize(
-    process.env.PSQL_NAME,
-    process.env.PSQL_USER,
-    process.env.PSQL_PASS,
+    process.env.POSTGRES_DB,
+    process.env.POSTGRES_USER,
+    process.env.PSQL_HOST,
     {
       dialect: "sqlite",
       storage: "./session.sqlite",
@@ -26,7 +25,7 @@ if (process.env.NODE_ENV === "development") {
       ssl: {
         require: true,
         rejectUnauthorized: false,
-      }
+      },
     },
   });
 }

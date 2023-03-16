@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -58,6 +62,7 @@ const auth = {
         api_user: `${process.env.SENDGRID_NAME}`,
         api_key: `${process.env.SENDGRID_PASSWORD}`,
     },
+    // proxy: 'http://user:pass@localhost:3000' // optional proxy, default is false
 };
 const findUserByUsername = (username) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield models_1.default.User.findOne({
@@ -112,7 +117,7 @@ const findUserProfile = (username) => __awaiter(void 0, void 0, void 0, function
     });
     return user;
 });
-const nodemailerMailgun = nodemailer_1.default.createTransport(nodemailer_sendgrid_transport_1.default(auth));
+const nodemailerMailgun = nodemailer_1.default.createTransport((0, nodemailer_sendgrid_transport_1.default)(auth));
 exports.default = {
     getUsers: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const users = yield models_1.default.User.findAll({
@@ -538,7 +543,7 @@ exports.default = {
                 from: "typescriptappexample@example.com",
                 to: user.email,
                 subject: "Welcome to React TypeScript App",
-                html: `<p>Click this to active your account <a href='${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}'>${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}</a></p>`,
+                html: `<p>Click this to active your account <a href='${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}'>${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}</a></p>`, // html body
             };
             console.log("sending mail");
             nodemailerMailgun.sendMail(msg, (err, response) => {
@@ -693,7 +698,7 @@ exports.default = {
                     from: "typescriptappexample@example.com",
                     to: req.body.email,
                     subject: "Welcome to React TypeScript App",
-                    html: `<p>Click this to active your account <a href='${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}'>${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}</a></p>`,
+                    html: `<p>Click this to active your account <a href='${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}'>${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}</a></p>`, // html body
                 };
                 console.log("sending mail");
                 nodemailerMailgun.sendMail(msg, (err, response) => {

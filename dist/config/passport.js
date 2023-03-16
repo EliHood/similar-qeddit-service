@@ -35,7 +35,7 @@ passport_1.default.use(new GoogleSta({
     clientID: process.env.clientID,
     clientSecret: process.env.clientSecret,
     callbackURL: process.env.callbackURL,
-    passReqToCallback: true,
+    passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a user is logged in or not)
 }, (req, token, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(profile);
     models_1.default.User.findOne({ where: { googleId: profile.id } }).then((userExist) => __awaiter(void 0, void 0, void 0, function* () {

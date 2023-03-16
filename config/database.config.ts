@@ -3,7 +3,7 @@ export interface DatabaseConfig {
   password: string;
   database: string;
   host: string;
-  port: number;
+  port: unknown;
   dialect: string;
   timezone: string;
 }
@@ -15,7 +15,7 @@ export interface ProductionDbConfig {
   host: string;
   dialect: string;
   use_env_variable: string;
-  ssl:boolean;
+  ssl: boolean;
 }
 
 export const productionConfig: ProductionDbConfig = {
@@ -27,7 +27,6 @@ export const productionConfig: ProductionDbConfig = {
   dialect: "postgres",
   ssl: true,
   use_env_variable: "DATABASE_URL",
-  
 };
 
 export const databaseConfig: DatabaseConfig = {
@@ -35,7 +34,7 @@ export const databaseConfig: DatabaseConfig = {
   password: "",
   database: "elifullstack",
   host: "127.0.0.1",
-  port: 5432,
+  port: process.env.POSTGRES_PORT,
   dialect: "postgres",
   timezone: "+00:00",
 };

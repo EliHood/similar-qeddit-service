@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.down = exports.up = void 0;
-exports.up = (queryInterface, Sequelize) => {
+const up = (queryInterface, Sequelize) => {
     return queryInterface.createTable("Users", {
         id: {
             allowNull: false,
@@ -71,7 +71,9 @@ exports.up = (queryInterface, Sequelize) => {
         },
     });
 };
-exports.down = (queryInterface, Sequelize) => {
+exports.up = up;
+const down = (queryInterface, Sequelize) => {
     return queryInterface.dropTable("Users");
 };
+exports.down = down;
 //# sourceMappingURL=20191016154638-create-user.js.map

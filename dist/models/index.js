@@ -11,22 +11,22 @@ if (process.env.NODE_ENV === "production") {
     var sequelize = new Sequelize(process.env.DATABASE_URL, {
         dialectOptions: {
             ssl: {
-                rejectUnauthorized: false
-            }
-        }
+                rejectUnauthorized: false,
+            },
+        },
     });
 }
 else {
     console.log(process.env.POSTGRES_DB, process.env.POSTGRES_USER, process.env.PSQL_HOST);
     var sequelize = new Sequelize(process.env.POSTGRES_DB, process.env.POSTGRES_USER, "", {
-        host: process.env.PSQL_HOST,
+        host: process.env.POSTGRES_HOST || "localhost",
         dialect: "postgres",
         pool: {
-            max: 100,
+            max: 100000000,
             min: 0,
-            idle: 200000,
+            idle: 20000000,
             // @note https://github.com/sequelize/sequelize/issues/8133#issuecomment-359993057
-            acquire: 1000000,
+            acquire: 100000000,
         },
     });
 }

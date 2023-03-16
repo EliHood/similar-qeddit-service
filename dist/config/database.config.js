@@ -15,7 +15,7 @@ exports.databaseConfig = {
     password: "",
     database: "elifullstack",
     host: "127.0.0.1",
-    port: 5432,
+    port: process.env.POSTGRES_PORT,
     dialect: "postgres",
     timezone: "+00:00",
 };
