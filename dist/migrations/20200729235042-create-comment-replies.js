@@ -1,37 +1,37 @@
 "use strict";
 module.exports = {
-    up: (queryInterface, Sequelize) => {
+    up: function (queryInterface, Sequelize) {
         return queryInterface.createTable("CommentReplies", {
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
-                type: Sequelize.INTEGER,
+                type: Sequelize.INTEGER
             },
             replyBody: {
-                type: Sequelize.TEXT,
+                type: Sequelize.TEXT
             },
             postId: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.INTEGER
             },
             userId: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.INTEGER
             },
             commentId: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.INTEGER
             },
             createdAt: {
                 allowNull: false,
-                type: Sequelize.DATE,
+                type: Sequelize.DATE
             },
             updatedAt: {
                 allowNull: false,
-                type: Sequelize.DATE,
-            },
+                type: Sequelize.DATE
+            }
         });
     },
-    down: (queryInterface, Sequelize) => {
+    down: function (queryInterface) {
         return queryInterface.dropTable("CommentReplies");
-    },
+    }
 };
 //# sourceMappingURL=20200729235042-create-comment-replies.js.map

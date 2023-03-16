@@ -18,7 +18,7 @@ export interface PostInstance {
   userId: number;
 }
 
-export = (sequelize: Sequelize, DataTypes: DataTypes) => {
+export default function(sequelize: Sequelize) {
   const Post = sequelize.define(
     "Post",
     {
@@ -40,7 +40,7 @@ export = (sequelize: Sequelize, DataTypes: DataTypes) => {
       userId: DataTypes.INTEGER
     },
     {}
-  );
+  ) as any;
 
   Post.associate = function(models) {
     Post.belongsTo(models.User, {
@@ -68,7 +68,5 @@ export = (sequelize: Sequelize, DataTypes: DataTypes) => {
     });
   };
 
-
-
   return Post;
-};
+}

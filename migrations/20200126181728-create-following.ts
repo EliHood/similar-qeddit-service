@@ -1,7 +1,7 @@
-import { QueryInterface, SequelizeStatic } from "sequelize";
+import { QueryInterface } from "sequelize";
 
 export = {
-  up: (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+  up: (queryInterface: QueryInterface, Sequelize: any) => {
     return queryInterface.createTable("Followings", {
       id: {
         allowNull: false,
@@ -30,7 +30,7 @@ export = {
     });
   },
 
-  down: (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+  down: (queryInterface: QueryInterface) => {
     return queryInterface.dropTable("Followings");
   }
 };

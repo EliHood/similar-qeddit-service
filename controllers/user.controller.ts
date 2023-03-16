@@ -1,11 +1,15 @@
 import * as bcrypt from "bcrypt";
 import dotenv from "dotenv";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import sgTransport from "nodemailer-sendgrid-transport";
 import models from "../models";
-import User from "./interfaces";
+import { Session } from "express-session";
+
+interface ISession<T> extends Session {
+  user: T;
+}
 
 dotenv.config();
 const comparePassword = async (
@@ -20,7 +24,7 @@ const comparePassword = async (
 };
 
 const isUser = (req: any): String => {
-  var curUser: String;
+  let curUser: String;
   if (req.session && req.session.user) {
     return (curUser = req.session.user.id);
   } else {
@@ -33,38 +37,37 @@ const isUser = (req: any): String => {
 const auth = {
   auth: {
     api_user: `${process.env.SENDGRID_NAME}`,
-    api_key: `${process.env.SENDGRID_PASSWORD}`,
-  },
+    api_key: `${process.env.SENDGRID_PASSWORD}`
+  }
   // proxy: 'http://user:pass@localhost:3000' // optional proxy, default is false
 };
 
-const findUserByUsername = async (username: string): Promise<Object> => {
+const findUserByUsername = async <T>(username: string): Promise<any> => {
   const user = await models.User.findOne({
     where: {
-      username: username,
+      username
     },
-    raw: true,
+    raw: true
   });
-  console.log("fdfdfdfdf", user);
   return user;
 };
 
 const findUserByEmail = async (email: string): Promise<Object> => {
   const user = await models.User.findOne({
     where: {
-      email: email,
+      email
     },
-    raw: true,
+    raw: true
   });
   return user;
 };
 
-const findUserById = async (id: number): Promise<Object> => {
+const findUserById = async (id: number): Promise<any> => {
   const user = await models.User.findOne({
     where: {
-      id: id,
+      id
     },
-    raw: true,
+    raw: true
   });
 
   return user;
@@ -73,7 +76,7 @@ const findUserById = async (id: number): Promise<Object> => {
 const findUserProfile = async (username: string): Promise<any> => {
   const user = await models.User.findOne({
     where: {
-      username,
+      username
     },
     include: [
       {
@@ -83,15 +86,15 @@ const findUserProfile = async (username: string): Promise<any> => {
           {
             model: models.User,
             as: "followerDetails",
-            attributes: ["username"],
-          },
-        ],
+            attributes: ["username"]
+          }
+        ]
       },
       {
         model: models.Following,
-        as: "UserFollowings",
-      },
-    ],
+        as: "UserFollowings"
+      }
+    ]
   });
   return user;
 };
@@ -109,9 +112,9 @@ export default {
             {
               model: models.User,
               as: "followerDetails",
-              attributes: ["username"],
-            },
-          ],
+              attributes: ["username"]
+            }
+          ]
         },
         {
           model: models.Following,
@@ -120,13 +123,13 @@ export default {
             {
               model: models.User,
               as: "followingDetails",
-              attributes: ["username"],
-            },
-          ],
-        },
-      ],
+              attributes: ["username"]
+            }
+          ]
+        }
+      ]
     });
-    users.forEach((user) => {
+    users.forEach(user => {
       console.log("testt", user.UserFollowers);
 
       if (user.UserFollowings.length && user.UserFollowers.length === 0) {
@@ -137,12 +140,12 @@ export default {
         user.setDataValue("isFollowing", false);
         console.log("fsfsfsfsfsfs");
       } else {
-        user.UserFollowings.forEach((myUser) => {
+        user.UserFollowings.forEach(myUser => {
           if (myUser.following === req.session.user.id) {
             user.setDataValue("isFollowing", true);
           }
         });
-        user.UserFollowers.forEach((myUser) => {
+        user.UserFollowers.forEach(myUser => {
           if (myUser.followerId === req.session.user.id) {
             user.setDataValue("isFollowing", true);
           }
@@ -159,7 +162,7 @@ export default {
       // findUser.setDataValue("isFollowing", false)
 
       if (findUser) {
-        findUser.UserFollowers.forEach((item) => {
+        findUser.UserFollowers.forEach(item => {
           if (item.followerId === isUser(req)) {
             findUser.setDataValue("isFollowing", true);
           } else if (item.followerId === isUser(req)) {
@@ -169,26 +172,26 @@ export default {
         return res.status(200).send(findUser);
       } else {
         return res.status(500).send({
-          message: "User not found",
+          message: "User not found"
         });
       }
     } catch (err) {
       return res.status(500).send({
         message: "Something went wrong",
-        err,
+        err
       });
     }
   },
   editProfile: async (req: Request, res: Response) => {
     const user = await models.User.findOne({
       where: {
-        id: isUser(req),
+        id: isUser(req)
       },
-      attributes: { exclude: ["password"], include: ["bio", "gravatar"] },
+      attributes: { exclude: ["password"], include: ["bio", "gravatar"] }
     });
     if (!user) {
       return res.status(401).send({
-        message: "Profile err",
+        message: "Profile err"
       });
     }
     return res.json(user);
@@ -203,27 +206,27 @@ export default {
       return models.User.update(
         {
           bio: userData.bio,
-          gravatar: userData.gravatar,
+          gravatar: userData.gravatar
         },
         {
           where: {
-            id: isUser(req),
-          },
+            id: isUser(req)
+          }
         },
         { transaction }
-      ).then(async (user) => {
+      ).then(async user => {
         console.log("sfsff", user);
         models.User.findOne({
           where: {
-            id: isUser(req),
+            id: isUser(req)
           },
-          attributes: ["gravatar", "bio"],
-        }).then(async (newBio) => {
+          attributes: ["gravatar", "bio"]
+        }).then(async newBio => {
           console.log("anothfdf", newBio);
           await transaction.commit();
           return res.status(200).send({
             message: "Profile Updated Successfully",
-            user: newBio,
+            user: newBio
           });
         });
       });
@@ -231,7 +234,7 @@ export default {
       await transaction.rollback();
       return res.status(500).send({
         message: "Something went wrong",
-        error: err,
+        error: err
       });
     }
   },
@@ -245,8 +248,8 @@ export default {
           meta: {
             type: "error",
             status: 403,
-            message: `this account ${credentials.username} is not yet registered`,
-          },
+            message: `this account ${credentials.username} is not yet registered`
+          }
         });
       }
       if (user.username)
@@ -255,8 +258,8 @@ export default {
             meta: {
               type: "error",
               status: 403,
-              message: `Please activate your account to login`,
-            },
+              message: `Please activate your account to login`
+            }
           });
         }
       const isPasswordValid = await comparePassword(
@@ -269,8 +272,8 @@ export default {
           meta: {
             type: "error",
             status: 403,
-            message: "invalid password",
-          },
+            message: "invalid password"
+          }
         });
       }
       if (
@@ -281,13 +284,13 @@ export default {
           meta: {
             type: "error",
             status: 403,
-            message: "invalid password",
-          },
+            message: "invalid password"
+          }
         });
       }
 
       /* save session */
-      req.session.user = user;
+      (req.session as ISession<typeof user>).user = user;
       req.session.save(() => {});
 
       // set token and stuff
@@ -300,9 +303,9 @@ export default {
           type: "success",
           status: 200,
           message: "Sucessfully Authenticated",
-          token,
+          token
         },
-        user,
+        user
       });
     } catch (error) {
       console.log(error);
@@ -310,8 +313,8 @@ export default {
         meta: {
           type: "error",
           status: 500,
-          message: "server error",
-        },
+          message: "server error"
+        }
       });
     }
   },
@@ -323,8 +326,8 @@ export default {
         meta: {
           type: "success",
           status: 200,
-          message: "",
-        },
+          message: ""
+        }
       });
     } catch (err) {
       console.log(err);
@@ -332,8 +335,8 @@ export default {
         meta: {
           type: "error",
           status: 500,
-          message: "server error",
-        },
+          message: "server error"
+        }
       });
     }
   },
@@ -343,36 +346,36 @@ export default {
     if (curUser) {
       try {
         const userToFollow = await models.User.findOne({
-          where: { username },
+          where: { username }
         });
         if (userToFollow.id === curUser) {
           return res.status(500).send({
-            message: "You can't follow yourself",
+            message: "You can't follow yourself"
           });
         }
         const alreadyFollowed = await models.Followers.findOne({
           where: {
-            followerId: curUser,
-          },
+            followerId: curUser
+          }
         });
         if (alreadyFollowed) {
           return res.status(500).send({
-            message: "You're already following this user",
+            message: "You're already following this user"
           });
         }
         console.log("dsdsdd", userToFollow.id);
         await models.Following.create({
           following: userToFollow.id,
-          userId: curUser,
+          userId: curUser
         });
         await models.Followers.create({
           followerId: curUser,
-          userId: userToFollow.id,
-        }).then((user) => {
+          userId: userToFollow.id
+        }).then(user => {
           console.log("dsdsd", user);
           models.User.findOne({
             where: {
-              id: userToFollow.id,
+              id: userToFollow.id
             },
             include: [
               {
@@ -382,32 +385,32 @@ export default {
                   {
                     model: models.User,
                     as: "followerDetails",
-                    attributes: ["username"],
-                  },
-                ],
+                    attributes: ["username"]
+                  }
+                ]
               },
               {
                 model: models.Following,
-                as: "UserFollowings",
-              },
-            ],
-          }).then((follow) => {
+                as: "UserFollowings"
+              }
+            ]
+          }).then(follow => {
             follow.setDataValue("isFollowing", true);
             return res.status(200).send({
               message: `You are now following ${userToFollow.username}`,
-              follow,
+              follow
             });
           });
         });
       } catch (err) {
         return res.status(500).send({
           message: "Something went wrong ",
-          err,
+          err
         });
       }
     } else {
       return res.status(500).send({
-        message: "You must be logged in to follow a user",
+        message: "You must be logged in to follow a user"
       });
     }
   },
@@ -417,15 +420,15 @@ export default {
     if (curUser) {
       try {
         const userToFollow = await models.User.findOne({
-          where: { username },
+          where: { username }
         });
         if (userToFollow.id === curUser) {
           return res.status(500).send({
-            message: "You can't unfollow yourself",
+            message: "You can't unfollow yourself"
           });
         }
         const isFollowed = await models.Following.findOne({
-          where: { following: userToFollow.id },
+          where: { following: userToFollow.id }
         });
         // if(isFollowed){
         //   return res.status(200).send({
@@ -436,19 +439,19 @@ export default {
         await models.Following.destroy({
           where: {
             following: userToFollow.id,
-            userId: curUser,
-          },
+            userId: curUser
+          }
         });
         await models.Followers.destroy({
           where: {
             followerId: curUser,
-            userId: userToFollow.id,
-          },
-        }).then((user) => {
+            userId: userToFollow.id
+          }
+        }).then(user => {
           console.log("dsdsd", user);
           models.User.findOne({
             where: {
-              id: curUser,
+              id: curUser
             },
             include: [
               {
@@ -458,33 +461,33 @@ export default {
                   {
                     model: models.User,
                     as: "followerDetails",
-                    attributes: ["username"],
-                  },
-                ],
+                    attributes: ["username"]
+                  }
+                ]
               },
               {
                 model: models.Following,
-                as: "UserFollowings",
-              },
-            ],
-          }).then((follow) => {
+                as: "UserFollowings"
+              }
+            ]
+          }).then(follow => {
             follow.setDataValue("isFollowing", false);
             console.log("fsfsfsfs", follow);
             return res.status(200).send({
               message: `You are unfollowing ${userToFollow.username}`,
-              follow,
+              follow
             });
           });
         });
       } catch (err) {
         return res.status(500).send({
           message: "Something went wrong ",
-          err,
+          err
         });
       }
     } else {
       return res.status(500).send({
-        message: "You must be logged in to unfollow a user",
+        message: "You must be logged in to unfollow a user"
       });
     }
   },
@@ -513,11 +516,11 @@ export default {
     if (curUser) {
       return res.status(200).send({
         user: curUser,
-        token: token ? token : null,
+        token: token ? token : null
       });
     } else {
       return res.status(500).send({
-        message: "User is not authenticated",
+        message: "User is not authenticated"
       });
     }
   },
@@ -526,13 +529,13 @@ export default {
       console.log("sdsfsffsf", req.session.user.email);
       const user = req.session.user;
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
+        expiresIn: "1h"
       });
       const msg = {
         from: "typescriptappexample@example.com",
         to: user.email,
         subject: "Welcome to React TypeScript App",
-        html: `<p>Click this to active your account <a href='${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}'>${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}</a></p>`, // html body
+        html: `<p>Click this to active your account <a href='${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}'>${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}</a></p>` // html body
       };
       console.log("sending mail");
       nodemailerMailgun.sendMail(msg, (err, response) => {
@@ -548,9 +551,9 @@ export default {
           type: "success",
           status: 200,
           message: `Email has been re-sent to ${user.email}, please activate your account`,
-          token,
+          token
         },
-        user,
+        user
       });
     } catch (err) {
       return res.status(500).send({
@@ -558,8 +561,8 @@ export default {
           type: "err",
           status: 500,
           err,
-          message: "There has been an error resending confirmation email",
-        },
+          message: "There has been an error resending confirmation email"
+        }
       });
     }
   },
@@ -572,8 +575,8 @@ export default {
         meta: {
           type: "error",
           status: 500,
-          message: "You already activated your account",
-        },
+          message: "You already activated your account"
+        }
       });
     } else {
       try {
@@ -585,18 +588,18 @@ export default {
                 type: "error",
                 err,
                 status: 500,
-                message: "Invalid Token",
-              },
+                message: "Invalid Token"
+              }
             });
           } else {
             models.User.findOne({
               where: {
-                id: req.params.userId,
-              },
+                id: req.params.userId
+              }
             })
-              .then((user) => {
+              .then(user => {
                 user.update({
-                  email_verified: true,
+                  email_verified: true
                 });
               })
               .then(() => {
@@ -606,15 +609,15 @@ export default {
                   user: {
                     token: decoded,
                     id: req.params.id,
-                    result,
+                    result
                   },
-                  decoded,
+                  decoded
                 });
               })
-              .catch((err) => {
+              .catch(err => {
                 return res.status(500).send({
                   message: "Something went wrong",
-                  err,
+                  err
                 });
               });
           }
@@ -633,8 +636,8 @@ export default {
           meta: {
             type: "error",
             status: 403,
-            message: "username and email are required",
-          },
+            message: "username and email are required"
+          }
         });
       }
 
@@ -647,8 +650,8 @@ export default {
             type: "error",
             status: 403,
             message: `email: ${credentials.email ||
-              credentials.username} is already registered`,
-          },
+              credentials.username} is already registered`
+          }
         });
       }
       if (registeredUserName) {
@@ -656,13 +659,13 @@ export default {
           meta: {
             type: "error",
             status: 403,
-            message: `username: ${credentials.username} is already registered`,
-          },
+            message: `username: ${credentials.username} is already registered`
+          }
         });
       }
 
       return models.sequelize
-        .transaction((t) => {
+        .transaction(t => {
           // chain all your queries here. make sure you return them.
           return bcrypt
             .hash(req.body.password, 12)
@@ -671,24 +674,24 @@ export default {
                 {
                   username: req.body.username,
                   password: hashedPassword,
-                  email: req.body.email,
+                  email: req.body.email
                 },
                 { transaction: t }
               );
             });
         })
-        .then((user) => {
-          req.session.user = user;
+        .then(user => {
+          (req.session as ISession<typeof user>).user = user;
           req.session.save(() => {});
           console.log(user);
           const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-            expiresIn: "1h",
+            expiresIn: "1h"
           });
           const msg = {
             from: "typescriptappexample@example.com",
             to: req.body.email,
             subject: "Welcome to React TypeScript App",
-            html: `<p>Click this to active your account <a href='${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}'>${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}</a></p>`, // html body
+            html: `<p>Click this to active your account <a href='${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}'>${process.env.ALLOW_ORIGIN}/emailConfirmationSuccess/${user.id}/${token}</a></p>` // html body
           };
           console.log("sending mail");
           nodemailerMailgun.sendMail(msg, (err, response) => {
@@ -704,24 +707,24 @@ export default {
               type: "success",
               status: 200,
               message: `Email has been sent to ${req.body.email}, please activate your account`,
-              token,
+              token
             },
-            user,
+            user
           });
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
           res.status(500).send({
             meta: {
               type: "error",
               status: 500,
-              message: err.message.slice(18),
-            },
+              message: err.message.slice(18)
+            }
           });
         });
     } catch (err) {
       console.log(err);
       return err;
     }
-  },
+  }
 };

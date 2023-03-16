@@ -20,7 +20,7 @@ export interface UserInstance {
   email_confirmation_token?: string;
 }
 
-export = (sequelize: Sequelize, DataTypes: DataTypes) => {
+export default function(sequelize: Sequelize) {
   const User = sequelize.define(
     "User",
     {
@@ -30,72 +30,72 @@ export = (sequelize: Sequelize, DataTypes: DataTypes) => {
         validate: {
           len: {
             args: [6, 50],
-            msg: "The username needs to be between 6 and 25 characteres long",
-          },
-        },
+            msg: "The username needs to be between 6 and 25 characteres long"
+          }
+        }
       },
       bio: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: true
       },
       gravatar: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       password: {
         type: DataTypes.STRING,
         validate: {
-          min: 6,
-        },
+          min: 6
+        }
       },
       email_verified: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
+        defaultValue: false
       },
       email_confirmation_token: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       googleId: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: true
       },
       email: DataTypes.STRING,
-      forget_password: DataTypes.STRING,
+      forget_password: DataTypes.STRING
     },
     {}
-  );
+  ) as any;
 
   User.associate = function(models) {
     User.hasMany(models.Post, {
       foreignKey: "userId",
       as: "author",
-      onDelete: "CASCADE",
+      onDelete: "CASCADE"
     });
     User.hasMany(models.Followers, {
       foreignKey: "userId",
       onDelete: "CASCADE",
-      as: "UserFollowers",
+      as: "UserFollowers"
     });
     User.hasMany(models.Followers, {
       foreignKey: "followerId",
       onDelete: "CASCADE",
-      as: "followerDetails",
+      as: "followerDetails"
     });
     User.hasMany(models.Notification, {
       foreignKey: "userId",
-      onDelete: "CASCADE",
+      onDelete: "CASCADE"
     });
     User.hasMany(models.Following, {
       foreignKey: "userId",
       onDelete: "CASCADE",
-      as: "UserFollowings",
+      as: "UserFollowings"
     });
 
     User.hasMany(models.Following, {
       foreignKey: "following",
       onDelete: "CASCADE",
-      as: "followingDetails",
+      as: "followingDetails"
     });
   };
 
   return User;
-};
+}

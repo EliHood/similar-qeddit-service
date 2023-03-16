@@ -1,6 +1,6 @@
 "use strict";
 module.exports = {
-    up: (queryInterface, Sequelize) => {
+    up: function (queryInterface, Sequelize) {
         return queryInterface.createTable("Notifications", {
             id: {
                 allowNull: false,
@@ -17,8 +17,7 @@ module.exports = {
                 onDelete: "CASCADE",
                 references: {
                     model: "Users",
-                    key: "id",
-                    as: "userId"
+                    key: "id"
                 }
             },
             status: {
@@ -35,7 +34,7 @@ module.exports = {
             }
         });
     },
-    down: (queryInterface, Sequelize) => {
+    down: function (queryInterface) {
         return queryInterface.dropTable("Notifications");
     }
 };

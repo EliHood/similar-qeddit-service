@@ -25,14 +25,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const express = __importStar(require("express"));
-const notification_router_1 = __importDefault(require("./notification.router"));
-const post_router_1 = __importDefault(require("./post.router"));
-const user_router_1 = __importDefault(require("./user.router"));
-const router = express.Router();
-router.use("/users", user_router_1.default);
-router.use("/posts", post_router_1.default);
-router.use("/notifications", notification_router_1.default);
-exports.default = router;
+exports.__esModule = true;
+var express = __importStar(require("express"));
+var notification_router_1 = __importDefault(require("./notification.router"));
+var post_router_1 = __importDefault(require("./post.router"));
+var user_router_1 = __importDefault(require("./user.router"));
+var router = express.Router();
+router.use("/users", user_router_1["default"]);
+router.use("/posts", post_router_1["default"]);
+router.use("/notifications", notification_router_1["default"]);
+exports["default"] = router;
 //# sourceMappingURL=apiRouter.js.map

@@ -1,5 +1,5 @@
 import express from "express";
-import { notificationController, userController } from "../controllers";
+import { notificationController } from "../controllers";
 const router = express.Router();
 
 router.get("/:userId", notificationController.getAllNotifications);

@@ -16,7 +16,7 @@ export interface NotificationInstance {
   status: string; // replace with 'validValue1' | 'validValue2', ...
 }
 
-export = (sequelize: Sequelize, DataTypes: DataTypes) => {
+export default function(sequelize: Sequelize) {
   const Notification = sequelize.define("Notification", {
     userId: {
       type: DataTypes.INTEGER,
@@ -31,7 +31,7 @@ export = (sequelize: Sequelize, DataTypes: DataTypes) => {
       allowNull: false,
       values: ["read", "unread"]
     }
-  });
+  }) as any;
 
   Notification.associate = function(models) {
     Notification.belongsTo(models.User, {
@@ -41,4 +41,4 @@ export = (sequelize: Sequelize, DataTypes: DataTypes) => {
   };
 
   return Notification;
-};
+}

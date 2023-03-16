@@ -12,10 +12,10 @@ export default {
       await models.Notification.create({ userId, body, status: "unread" });
     }
     const data = {
-      body: body,
-      currentUser: currentUser,
-      userId: userId,
-      commenterId: commenterId,
+      body,
+      currentUser,
+      userId,
+      commenterId
     };
     pusherConfig.trigger("notification", "my-event", data);
   },
@@ -34,5 +34,5 @@ export default {
     }
 
     pusherConfig.trigger("notification", "user-mention", body);
-  },
+  }
 };

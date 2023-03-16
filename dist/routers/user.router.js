@@ -25,11 +25,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const express = __importStar(require("express"));
-const passport_1 = __importDefault(require("passport"));
-const controllers_1 = require("../controllers");
-const router = express.Router();
+exports.__esModule = true;
+var express = __importStar(require("express"));
+var passport_1 = __importDefault(require("passport"));
+var controllers_1 = require("../controllers");
+var router = express.Router();
 router.post("/signup", controllers_1.userController.signUpUser);
 router.get("/logOut", controllers_1.userController.logOut);
 router.post("/login", controllers_1.userController.signInUser);
@@ -38,14 +38,14 @@ router.get("/editProfile", controllers_1.userController.editProfile);
 router.put("/updateProfile", controllers_1.userController.updateProfile);
 router.get("/profile/:username", controllers_1.userController.profile);
 router.post("/followUser/:username", controllers_1.userController.followUser);
-router.delete("/unfollowUser/:username", controllers_1.userController.unFollowUser);
+router["delete"]("/unfollowUser/:username", controllers_1.userController.unFollowUser);
 router.post("/resendConfirmation", controllers_1.userController.resendEmailConfirmation);
 router.get("/emailConfirmation/:userId/:token", controllers_1.userController.emailConfirmationToken);
-router.get("/auth/google", passport_1.default.authenticate("google", { scope: ["email"] }));
-router.get("/auth/google/callback", passport_1.default.authenticate("google", {
+router.get("/auth/google", passport_1["default"].authenticate("google", { scope: ["email"] }));
+router.get("/auth/google/callback", passport_1["default"].authenticate("google", {
     failureRedirect: "/login",
-    successRedirect: process.env.ALLOW_ORIGIN,
+    successRedirect: process.env.ALLOW_ORIGIN
 }));
 router.get("/currentUser", controllers_1.userController.currentUser);
-exports.default = router;
+exports["default"] = router;
 //# sourceMappingURL=user.router.js.map

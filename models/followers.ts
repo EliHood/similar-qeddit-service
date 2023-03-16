@@ -1,7 +1,6 @@
 import { DataTypes, Sequelize } from "sequelize";
 
 export interface FollowersAttributes {
-  // followerId ? : number;
   followerId?: number;
 }
 
@@ -11,11 +10,11 @@ export interface FollowersInstance {
   followerId: number;
 }
 
-export = (sequelize: Sequelize, DataTypes: DataTypes) => {
+export default function(sequelize: Sequelize) {
   const Followers = sequelize.define("Followers", {
     userId: DataTypes.INTEGER,
     followerId: DataTypes.INTEGER
-  });
+  }) as any;
 
   Followers.associate = function(models) {
     Followers.belongsTo(models.User, {
@@ -31,4 +30,4 @@ export = (sequelize: Sequelize, DataTypes: DataTypes) => {
   };
   // Followers.follow = (userId, follower_id) => Followers.create({ userId, follower_id});
   return Followers;
-};
+}

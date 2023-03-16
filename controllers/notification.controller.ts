@@ -7,13 +7,13 @@ export default {
     const { userId } = req.params;
     console.log(userId);
     const notification = await models.Notification.findAll({
-      where: { userId, status: "unread" },
+      where: { userId, status: "unread" }
     });
 
-    const responseObject = notification.map((item) => ({
+    const responseObject = notification.map(item => ({
       body: item.body,
       notificationId: item.id,
-      status: item.status,
+      status: item.status
     }));
 
     return res.send(responseObject);
@@ -32,30 +32,30 @@ export default {
     const notificationObject = await models.Notification.findOne({
       where: {
         userId: curUser,
-        id: notificationId,
-      },
+        id: notificationId
+      }
     });
     notificationObject
       .update({
-        status: "read",
+        status: "read"
       })
-      .then(async (response) => {
+      .then(async response => {
         console.log(response);
         const notifications = await models.Notification.findAll({
-          where: { userId: curUser },
+          where: { userId: curUser }
         });
-        const responseObject = notifications.map((item) => ({
+        const responseObject = notifications.map(item => ({
           body: item.body,
           notificationId: item.id,
-          status: item.status,
+          status: item.status
         }));
 
         // console.log(notifications);
         return res.status(200).send({
           notifications: responseObject,
           status: response.status,
-          createdAt: response.createdAt,
+          createdAt: response.createdAt
         });
       });
-  },
+  }
 };

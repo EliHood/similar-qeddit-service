@@ -18,8 +18,7 @@ export = {
         onDelete: "CASCADE",
         references: {
           model: "Users",
-          key: "id",
-          as: "userId"
+          key: "id"
         }
       },
       status: {
@@ -37,7 +36,7 @@ export = {
     });
   },
 
-  down: (queryInterface: QueryInterface, Sequelize: any) => {
+  down: (queryInterface: QueryInterface) => {
     return queryInterface.dropTable("Notifications");
   }
 };

@@ -1,8 +1,10 @@
 "use strict";
-module.exports = (sequelize, DataTypes) => {
-    const Following = sequelize.define("Following", {
-        userId: DataTypes.INTEGER,
-        following: DataTypes.INTEGER
+exports.__esModule = true;
+var sequelize_1 = require("sequelize");
+function default_1(sequelize) {
+    var Following = sequelize.define("Following", {
+        userId: sequelize_1.DataTypes.INTEGER,
+        following: sequelize_1.DataTypes.INTEGER
     });
     Following.associate = function (models) {
         Following.belongsTo(models.User, {
@@ -16,5 +18,6 @@ module.exports = (sequelize, DataTypes) => {
         });
     };
     return Following;
-};
+}
+exports["default"] = default_1;
 //# sourceMappingURL=following.js.map

@@ -14,11 +14,11 @@ export interface LikesInstance {
   userId: number;
 }
 
-export = (sequelize: Sequelize, DataTypes: DataTypes) => {
+export default function(sequelize: Sequelize) {
   const Likes = sequelize.define("Likes", {
     userId: DataTypes.INTEGER,
     resourceId: DataTypes.INTEGER
-  });
+  }) as any;
 
   Likes.associate = function(models) {
     // associations can be defined here
@@ -36,4 +36,4 @@ export = (sequelize: Sequelize, DataTypes: DataTypes) => {
   };
 
   return Likes;
-};
+}

@@ -26,7 +26,7 @@ export const productionConfig: ProductionDbConfig = {
   host: "127.0.0.1",
   dialect: "postgres",
   ssl: true,
-  use_env_variable: "DATABASE_URL",
+  use_env_variable: "DATABASE_URL"
 };
 
 export const databaseConfig: DatabaseConfig = {
@@ -36,5 +36,5 @@ export const databaseConfig: DatabaseConfig = {
   host: "127.0.0.1",
   port: process.env.POSTGRES_PORT,
   dialect: "postgres",
-  timezone: "+00:00",
+  timezone: "+00:00"
 };
