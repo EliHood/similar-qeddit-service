@@ -36,7 +36,7 @@ export = {
     });
   },
 
-  down: (queryInterface: QueryInterface, Sequelize: any) => {
+  down: (queryInterface: QueryInterface) => {
     return queryInterface.dropTable("Comments");
   }
 };

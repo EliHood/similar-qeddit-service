@@ -25,27 +25,27 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const chai = __importStar(require("chai"));
-const chai_1 = require("chai");
-const chai_http_1 = __importDefault(require("chai-http"));
-const app_1 = __importDefault(require("../app"));
-chai.use(chai_http_1.default);
-describe("Should test index", () => {
-    it("should test 200 index page", (done) => {
+exports.__esModule = true;
+var chai = __importStar(require("chai"));
+var chai_1 = require("chai");
+var chai_http_1 = __importDefault(require("chai-http"));
+var app_1 = __importDefault(require("../app"));
+chai.use(chai_http_1["default"]);
+describe("Should test index", function () {
+    it("should test 200 index page", function (done) {
         chai
-            .request(app_1.default)
+            .request(app_1["default"])
             .get("/")
-            .end((err, res) => {
+            .end(function (err, res) {
             (0, chai_1.expect)(res).to.have.status(200);
             done();
         });
     });
-    it("should test currentUser if not authenticated", (done) => {
+    it("should test currentUser if not authenticated", function (done) {
         chai
-            .request(app_1.default)
+            .request(app_1["default"])
             .get("/api/v1/users/currentUser")
-            .end((err, res) => {
+            .end(function (err, res) {
             (0, chai_1.expect)(res).to.have.status(500);
             done();
         });

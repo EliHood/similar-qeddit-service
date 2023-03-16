@@ -14,26 +14,26 @@ export interface RePostInstance {
   postId: number;
 }
 
-export = (sequelize: Sequelize, DataTypes: DataTypes) => {
+export default function(sequelize: Sequelize) {
   const RePosts = sequelize.define("RePosts", {
     userId: DataTypes.INTEGER,
-    postId: DataTypes.INTEGER,
-  });
+    postId: DataTypes.INTEGER
+  }) as any;
 
   RePosts.associate = function(models) {
     RePosts.belongsTo(models.User, {
       as: "author",
       foreignKey: "userId",
       timestamps: false,
-      onDelete: "CASCADE",
+      onDelete: "CASCADE"
     });
     RePosts.belongsTo(models.Post, {
       foreignKey: "postId",
       timestamps: false,
       onDelete: "CASCADE",
-      targetKey: "id",
+      targetKey: "id"
     });
   };
 
   return RePosts;
-};
+}

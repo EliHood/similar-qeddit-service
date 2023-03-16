@@ -1,19 +1,28 @@
 "use strict";
-
-const fs = require("fs");
-const path = require("path");
-const Sequelize = require("sequelize");
+import fs from "fs";
+import path from "path";
+import { Sequelize } from "sequelize";
+import dotenv from "dotenv";
 const basename = path.basename(__filename);
 interface Db {
-  sequelize: object;
+  Likes: any;
+  Comments: any;
+  CommentReplies: any;
+  RePosts: any;
+  Post: any;
+  Following: any;
+  Followers: any;
+  Notification: any;
+  User: any;
+  sequelize: any;
   Sequelize: object;
 }
 
 const db = {} as Db;
-const dotenv = require("dotenv");
 dotenv.config();
+let sequelize;
 if (process.env.NODE_ENV === "production") {
-  var sequelize = new Sequelize(process.env.DATABASE_URL, {
+  sequelize = new Sequelize(process.env.DATABASE_URL as string, {
     dialectOptions: {
       ssl: {
         rejectUnauthorized: false,
@@ -27,9 +36,9 @@ if (process.env.NODE_ENV === "production") {
     process.env.PSQL_HOST
   );
 
-  var sequelize = new Sequelize(
-    process.env.POSTGRES_DB,
-    process.env.POSTGRES_USER,
+  sequelize = new Sequelize(
+    process.env.POSTGRES_DB as string,
+    process.env.POSTGRES_USER as string,
     "",
     {
       host: process.env.POSTGRES_HOST || "localhost",

@@ -15,40 +15,40 @@ export interface CommentInstance {
   userId: number;
 }
 
-export = (sequelize: Sequelize, DataTypes: DataTypes) => {
+export default function(sequelize: Sequelize) {
   const Comment = sequelize.define("Comments", {
     comment_body: {
       allowNull: true,
-      type: DataTypes.STRING,
+      type: DataTypes.STRING
     },
     gifUrl: {
       allowNull: true,
-      type: Sequelize.STRING,
+      type: DataTypes.STRING
     },
     userId: DataTypes.INTEGER,
-    postId: DataTypes.INTEGER,
-  });
+    postId: DataTypes.INTEGER
+  }) as any;
 
   Comment.associate = function(models) {
     Comment.belongsTo(models.User, {
       as: "author",
       foreignKey: "userId",
-      onDelete: "CASCADE",
+      onDelete: "CASCADE"
     });
     Comment.belongsTo(models.Post, {
       foreignKey: "postId",
       timestamps: false,
       onDelete: "CASCADE",
-      targetKey: "id",
+      targetKey: "id"
     });
     Comment.hasMany(models.CommentReplies, {
       as: "commentReplies",
       foreignKey: "commentId",
       timestamps: false,
       targetKey: "id",
-      onDelete: "CASCADE",
+      onDelete: "CASCADE"
     });
   };
 
   return Comment;
-};
+}

@@ -1,22 +1,24 @@
 "use strict";
-module.exports = (sequelize, DataTypes) => {
-    const Post = sequelize.define("Post", {
-        title: DataTypes.STRING,
-        postContent: DataTypes.STRING,
+exports.__esModule = true;
+var sequelize_1 = require("sequelize");
+function default_1(sequelize) {
+    var Post = sequelize.define("Post", {
+        title: sequelize_1.DataTypes.STRING,
+        postContent: sequelize_1.DataTypes.STRING,
         likedByMe: {
-            type: DataTypes.BOOLEAN,
+            type: sequelize_1.DataTypes.BOOLEAN,
             defaultValue: false,
             allowNull: false
         },
         likeCounts: {
-            type: DataTypes.INTEGER,
+            type: sequelize_1.DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0,
             validate: {
                 min: 0
             }
         },
-        userId: DataTypes.INTEGER
+        userId: sequelize_1.DataTypes.INTEGER
     }, {});
     Post.associate = function (models) {
         Post.belongsTo(models.User, {
@@ -44,5 +46,6 @@ module.exports = (sequelize, DataTypes) => {
         });
     };
     return Post;
-};
+}
+exports["default"] = default_1;
 //# sourceMappingURL=post.js.map

@@ -1,7 +1,5 @@
 "use strict";
 
-import { DataTypes } from "sequelize/types";
-
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(

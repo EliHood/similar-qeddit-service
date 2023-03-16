@@ -7,9 +7,9 @@ export default () => async (req: any, res: Response, next: NextFunction) => {
   if (req.session && req.session.user) {
     const user = await models.User.findOne({
       where: {
-        id: req.session.user.id,
+        id: req.session.user.id
       },
-      raw: true,
+      raw: true
     });
     // console.log(user, "fdffdff");
     if (user === null) {

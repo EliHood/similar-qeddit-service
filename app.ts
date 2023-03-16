@@ -13,6 +13,7 @@ import apiRouter from "./routers";
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
+console.log("port", PORT);
 const app: express.Application = express();
 const httpServer = http.createServer(app);
 
@@ -70,15 +71,15 @@ app.get("/", (req, res) => {
 //   });
 // }
 
-models.sequelize.sync().then(() => {
-  httpServer.listen(PORT, () => {
-    console.log(
-      "App is running at http://localhost:%d in %s mode",
-      app.get("port"),
-      app.get("env")
-    );
-    console.log("  Press CTRL-C to stop\n");
-  });
+// models.sequelize.sync().then(() => {
+httpServer.listen(PORT, () => {
+  console.log(
+    "App is running at http://localhost:%d in %s mode",
+    app.get("port"),
+    app.get("env")
+  );
+  console.log("  Press CTRL-C to stop\n");
 });
+// });
 
 export default app;

@@ -1,7 +1,6 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 module.exports = {
-    up: (queryInterface, Sequelize) => {
+    up: function (queryInterface, Sequelize) {
         return queryInterface.bulkInsert("Users", [
             {
                 id: 1000,
@@ -14,12 +13,12 @@ module.exports = {
                 updatedAt: Sequelize.fn("now"),
                 bio: null,
                 gravatar: "https://i.pravatar.cc/300",
-                email_confirmation_token: "",
+                email_confirmation_token: ""
             },
         ], {});
     },
-    down: (queryInterface, Sequelize) => {
+    down: function (queryInterface, Sequelize) {
         return queryInterface.bulkDelete("Users", null, {});
-    },
+    }
 };
 //# sourceMappingURL=20200807030716-User.js.map

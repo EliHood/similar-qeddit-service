@@ -6,7 +6,7 @@ import app from "../app";
 chai.use(chaiHttp);
 
 describe("Should test index", () => {
-  it("should test 200 index page", (done) => {
+  it("should test 200 index page", done => {
     chai
       .request(app)
       .get("/")
@@ -16,7 +16,7 @@ describe("Should test index", () => {
       });
   });
 
-  it("should test currentUser if not authenticated", (done) => {
+  it("should test currentUser if not authenticated", done => {
     chai
       .request(app)
       .get("/api/v1/users/currentUser")

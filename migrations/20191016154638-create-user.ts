@@ -6,17 +6,17 @@ export const up = (queryInterface: QueryInterface, Sequelize: any) => {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER,
+      type: Sequelize.INTEGER
     },
     gravatar: {
       allowNull: false,
       defaultValue:
         "https://api.adorable.io/avatars/400/bf1eed82fbe37add91cb4192e4d14de6.png",
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
     bio: {
       allowNull: true,
-      type: Sequelize.TEXT,
+      type: Sequelize.TEXT
     },
     username: {
       type: Sequelize.STRING,
@@ -24,18 +24,18 @@ export const up = (queryInterface: QueryInterface, Sequelize: any) => {
       validate: {
         len: {
           args: [4, 127],
-          msg: "The username needs to be between 3 and 25 characteres long",
-        },
-      },
+          msg: "The username needs to be between 3 and 25 characteres long"
+        }
+      }
     },
     password: {
       type: Sequelize.STRING,
       validate: {
         len: {
           args: [4, 127],
-          msg: "The password needs to be between 4 and 128 characteres long",
-        },
-      },
+          msg: "The password needs to be between 4 and 128 characteres long"
+        }
+      }
     },
 
     email: {
@@ -43,37 +43,36 @@ export const up = (queryInterface: QueryInterface, Sequelize: any) => {
       unique: true,
       validate: {
         isEmail: {
-          args: true,
-          msg: "Invalid email",
-        },
-      },
+          msg: "Invalid email"
+        }
+      }
     },
 
     forget_password: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
     googleId: {
       allowNull: true,
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE,
+      type: Sequelize.DATE
     },
     email_verified: {
       type: Sequelize.BOOLEAN,
-      defaultValue: false,
+      defaultValue: false
     },
     email_confirmation_token: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE,
-    },
+      type: Sequelize.DATE
+    }
   });
 };
 
-export const down = (queryInterface: QueryInterface, Sequelize) => {
+export const down = (queryInterface: QueryInterface) => {
   return queryInterface.dropTable("Users");
 };

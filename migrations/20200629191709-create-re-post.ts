@@ -1,36 +1,36 @@
-import { QueryInterface, SequelizeStatic } from "sequelize";
+import { QueryInterface } from "sequelize";
 
 export = {
-  up: (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+  up: (queryInterface: QueryInterface, Sequelize: any) => {
     return queryInterface.createTable("RePosts", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER
       },
 
       userId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER
       },
 
       postId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER
       },
 
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.DATE
       },
 
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-      },
+        type: Sequelize.DATE
+      }
     });
   },
 
-  down: (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+  down: (queryInterface: QueryInterface) => {
     return queryInterface.dropTable("RePosts");
-  },
+  }
 };

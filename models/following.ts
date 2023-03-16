@@ -14,11 +14,11 @@ export interface FollowingInstance {
   following: number;
 }
 
-export = (sequelize: Sequelize, DataTypes: DataTypes) => {
+export default function(sequelize: Sequelize) {
   const Following = sequelize.define("Following", {
     userId: DataTypes.INTEGER,
     following: DataTypes.INTEGER
-  });
+  }) as any;
 
   Following.associate = function(models) {
     Following.belongsTo(models.User, {
@@ -32,4 +32,4 @@ export = (sequelize: Sequelize, DataTypes: DataTypes) => {
     });
   };
   return Following;
-};
+}

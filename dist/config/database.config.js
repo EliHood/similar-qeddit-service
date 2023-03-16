@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.databaseConfig = exports.productionConfig = void 0;
 exports.productionConfig = {
     username: "root",
@@ -8,7 +8,7 @@ exports.productionConfig = {
     host: "127.0.0.1",
     dialect: "postgres",
     ssl: true,
-    use_env_variable: "DATABASE_URL",
+    use_env_variable: "DATABASE_URL"
 };
 exports.databaseConfig = {
     username: "eli",
@@ -17,6 +17,6 @@ exports.databaseConfig = {
     host: "127.0.0.1",
     port: process.env.POSTGRES_PORT,
     dialect: "postgres",
-    timezone: "+00:00",
+    timezone: "+00:00"
 };
 //# sourceMappingURL=database.config.js.map

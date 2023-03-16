@@ -1,16 +1,18 @@
 "use strict";
-module.exports = (sequelize, DataTypes) => {
-    const Notification = sequelize.define("Notification", {
+exports.__esModule = true;
+var sequelize_1 = require("sequelize");
+function default_1(sequelize) {
+    var Notification = sequelize.define("Notification", {
         userId: {
-            type: DataTypes.INTEGER,
+            type: sequelize_1.DataTypes.INTEGER,
             allowNull: false
         },
         body: {
-            type: DataTypes.STRING,
+            type: sequelize_1.DataTypes.STRING,
             allowNull: false
         },
         status: {
-            type: DataTypes.ENUM,
+            type: sequelize_1.DataTypes.ENUM,
             allowNull: false,
             values: ["read", "unread"]
         }
@@ -22,5 +24,6 @@ module.exports = (sequelize, DataTypes) => {
         });
     };
     return Notification;
-};
+}
+exports["default"] = default_1;
 //# sourceMappingURL=notification.js.map

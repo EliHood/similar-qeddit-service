@@ -1,11 +1,10 @@
 import dotenv from "dotenv";
-import e, { Request, Response } from "express";
+import { Response } from "express";
 import sequelize from "sequelize";
 import models from "../models";
 import { NotificationServ } from "../sockets";
 import pusherConfig from "./../sockets/pusherConfig";
 import { profanity } from "@2toad/profanity";
-import post from "../models/post";
 
 const Op = sequelize.Op;
 
@@ -16,7 +15,7 @@ const filterbadWords = (word: string) => {
   if (profanity.censor(word)) {
     arr = [];
     const sentence = word.split(" ");
-    for (let str in sentence) {
+    for (const str in sentence) {
       const newWord = sentence[str].split(" ").join("");
       console.log("newWord", newWord);
       const filteredWord = profanity.censor(newWord);
@@ -30,7 +29,7 @@ const filterbadWords = (word: string) => {
 };
 
 const isUser = (req: any): String => {
-  var curUser: String;
+  let curUser: String;
   if (req.session && req.session.user) {
     return (curUser = req.session.user.id);
   } else {
@@ -49,10 +48,10 @@ export default {
         {
           model: models.User,
           as: "author",
-          attributes: ["username", "gravatar", "bio"],
+          attributes: ["username", "gravatar", "bio"]
         },
         {
-          model: models.Likes,
+          model: models.Likes
         },
         {
           model: models.Comments,
@@ -64,16 +63,16 @@ export default {
                 {
                   model: models.User,
                   as: "author",
-                  attributes: ["username", "gravatar", "bio"],
-                },
-              ],
+                  attributes: ["username", "gravatar", "bio"]
+                }
+              ]
             },
             {
               model: models.User,
               as: "author",
-              attributes: ["username", "gravatar", "bio"],
-            },
-          ],
+              attributes: ["username", "gravatar", "bio"]
+            }
+          ]
         },
         {
           model: models.RePosts,
@@ -81,25 +80,25 @@ export default {
             {
               model: models.User,
               as: "author",
-              attributes: ["username", "gravatar", "bio"],
-            },
-          ],
-        },
+              attributes: ["username", "gravatar", "bio"]
+            }
+          ]
+        }
       ],
       order: [["createdAt", "DESC"]],
-      limit: 6,
+      limit: 6
     });
     let currentUser;
     currentUser = req.session && req.session.user ? req.session.user.id : 0;
 
-    posts.forEach((post) => {
+    posts.forEach(post => {
       if (post.Likes.length === 0) {
         post.setDataValue("likedByMe", false);
       }
       if (post.RePosts.length === 0) {
         post.setDataValue("RepostedByMe", false);
       }
-      post.RePosts.forEach((repost) => {
+      post.RePosts.forEach(repost => {
         const googleLogin = req.session.passport;
         if (typeof googleLogin === "object") {
           if (repost.userId === googleLogin.user.id) {
@@ -120,7 +119,7 @@ export default {
           }
         }
       });
-      post.Likes.forEach((like) => {
+      post.Likes.forEach(like => {
         // console.log(like.userId);
         if (req.user) {
           if (like.userId === req.session.passport.user.id) {
@@ -141,19 +140,19 @@ export default {
   postPage: async (req: any, res: Response) => {
     const postPage = await models.Post.findOne({
       where: {
-        id: req.params.id,
+        id: req.params.id
       },
       include: [
         {
           model: models.User,
           as: "author",
-          attributes: ["username", "gravatar", "bio"],
+          attributes: ["username", "gravatar", "bio"]
         },
         // limit the likes based on the logged in user
         {
-          model: models.Likes,
-        },
-      ],
+          model: models.Likes
+        }
+      ]
     });
     return res.json(postPage);
   },
@@ -164,28 +163,28 @@ export default {
       const created = await models.RePosts.findOne({
         where: {
           userId: req.params.userId,
-          postId: postId,
-        },
+          postId
+        }
       });
 
       if (!created) {
         return models.RePosts.create({
           userId: req.params.userId,
-          postId: postId,
-        }).then((post) => {
+          postId
+        }).then(post => {
           res.status(200).send({
             message: "Post Reposted",
-            post: post,
+            post
           });
         });
       } else {
         return res.status(401).send({
-          message: "Already Reposted",
+          message: "Already Reposted"
         });
       }
     } catch (err) {
       res.status(500).send({
-        message: "Failed to repost",
+        message: "Failed to repost"
       });
     }
   },
@@ -195,30 +194,30 @@ export default {
       const created = await models.RePosts.findOne({
         where: {
           userId: req.params.userId,
-          postId: postId,
-        },
+          postId
+        }
       });
       if (created) {
         return models.RePosts.destroy({
           where: {
             userId: req.params.userId,
-            postId: postId,
-          },
-        }).then((repost) => {
+            postId
+          }
+        }).then(repost => {
           res.status(200).send({
             message: "Post got unposted",
-            repost: repost,
-            postId: parseInt(postId),
+            repost,
+            postId: parseInt(postId)
           });
         });
       } else {
         res.status(401).send({
-          message: "Already got UnReposted",
+          message: "Already got UnReposted"
         });
       }
     } catch (err) {
       res.status(500).send({
-        message: "Failed to un-repost",
+        message: "Failed to un-repost"
       });
     }
   },
@@ -228,8 +227,8 @@ export default {
       try {
         await models.Comments.destroy({
           where: {
-            id: req.params.id,
-          },
+            id: req.params.id
+          }
         });
         return res.status(200).send("Comment has been deleted!");
       } catch (error) {
@@ -250,29 +249,29 @@ export default {
       postData = {
         title: filterbadWords(req.body.ourTitle),
         postContent: filterbadWords(req.body.ourPostContent),
-        userId: req.session.passport.user.id,
+        userId: req.session.passport.user.id
       };
     } else {
       postData = {
         title: filterbadWords(req.body.ourTitle),
         postContent: filterbadWords(req.body.ourPostContent),
-        userId: req.session.user.id,
+        userId: req.session.user.id
       };
     }
 
     console.log("dsdsdsdsdsdsdsdsdds", postData);
 
     await models.Post.create(postData)
-      .then((post) => {
+      .then(post => {
         models.Post.findOne({
           where: {
-            id: post.id,
+            id: post.id
           },
           include: [
             {
               model: models.User,
               as: "author",
-              attributes: ["username", "gravatar"],
+              attributes: ["username", "gravatar"]
             },
             {
               model: models.Comments,
@@ -280,23 +279,23 @@ export default {
                 {
                   model: models.User,
                   as: "author",
-                  attributes: ["username", "gravatar", "bio"],
-                },
-              ],
-            },
-          ],
-        }).then((newPost) => {
+                  attributes: ["username", "gravatar", "bio"]
+                }
+              ]
+            }
+          ]
+        }).then(newPost => {
           newPost.setDataValue("likedByMe", false);
           return res.status(200).send({
             message: "post created",
-            post: newPost,
+            post: newPost
           });
         });
       })
-      .catch((err) => {
+      .catch(err => {
         return res.status(401).send({
           message: `Something went wrong`,
-          error: err,
+          error: err
         });
       });
     console.log(req.body);
@@ -308,23 +307,23 @@ export default {
         comment_body: filterbadWords(req.body.comment_body),
         userId: currentUser,
         postId: req.body.id,
-        gifUrl: req.body.gifUrl,
+        gifUrl: req.body.gifUrl
       };
       console.log("dfffcheck", postData);
       const users = await models.User.findAll();
-      const usernames = users.map((item) => item.username);
+      const usernames = users.map(item => item.username);
 
-      await models.Comments.create(postData).then((comment) => {
+      await models.Comments.create(postData).then(comment => {
         console.log("this is the comment", comment);
         models.Comments.findOne({
           where: {
-            id: comment.id,
+            id: comment.id
           },
           include: [
             {
               model: models.User,
               as: "author",
-              attributes: ["username", "gravatar"],
+              attributes: ["username", "gravatar"]
             },
             {
               model: models.CommentReplies,
@@ -333,14 +332,14 @@ export default {
                 {
                   model: models.User,
                   as: "author",
-                  attributes: ["username", "gravatar", "bio"],
-                },
-              ],
-            },
-          ],
-        }).then(async (newComment) => {
+                  attributes: ["username", "gravatar", "bio"]
+                }
+              ]
+            }
+          ]
+        }).then(async newComment => {
           const body = req.body.comment_body;
-          if (usernames.some((user) => body.includes(user))) {
+          if (usernames.some(user => body.includes(user))) {
             const regex = /^@/i;
             const sentence = body.split(" ");
             for (let i = 0; i < sentence.length; i++) {
@@ -364,7 +363,7 @@ export default {
             console.log("this got called");
 
             pusherConfig.trigger("post-comments", "user-mention", {
-              comment: newComment,
+              comment: newComment
             });
           } else {
             console.log("no luck finding user");
@@ -378,11 +377,11 @@ export default {
           );
 
           pusherConfig.trigger("post-comments", "new-comment", {
-            comment: newComment,
+            comment: newComment
           });
           return res.status(200).send({
             message: "comment created",
-            comment: newComment,
+            comment: newComment
           });
         });
       });
@@ -390,7 +389,7 @@ export default {
       console.log("There was an error", error);
       return res.status(500).send({
         message: "Failed to write a comment",
-        error,
+        error
       });
     }
   },
@@ -400,13 +399,13 @@ export default {
     const currentUser = isUser(req);
     if (req.body.comment_body && req.body.gifUrl) {
       return res.status(401).send({
-        message: "Can't edit both",
+        message: "Can't edit both"
       });
     }
     console.log("dfdfdfd", req.params.userId, currentUser);
     if (req.params.userId != currentUser) {
       return res.status(401).send({
-        message: "Can't edit another users post",
+        message: "Can't edit another users post"
       });
     } else {
       try {
@@ -416,25 +415,25 @@ export default {
             comment_body: filterbadWords(req.body.commentData)
               ? filterbadWords(req.body.commentData)
               : "",
-            gifUrl: req.body.gifUrl ? req.body.gifUrl : "",
+            gifUrl: req.body.gifUrl ? req.body.gifUrl : ""
           },
           {
             where: {
-              id: req.params.commentId,
-            },
+              id: req.params.commentId
+            }
           },
           { transaction }
-        ).then(async (comment) => {
+        ).then(async comment => {
           console.log("anothfdf", comment);
           await transaction.commit();
           return res.status(200).send({
-            message: "Comment Edited Successfully",
+            message: "Comment Edited Successfully"
           });
         });
       } catch (err) {
         console.log("something went wrong", err);
         res.status(401).send({
-          message: "Something went wrong",
+          message: "Something went wrong"
         });
       }
     }
@@ -442,24 +441,24 @@ export default {
   searchPosts: async (req: any, res: Response) => {
     if (req.params.searchQuery === "") {
       return res.status(401).send({
-        message: "No Posts found",
+        message: "No Posts found"
       });
     }
     try {
       const posts = await models.Post.findAll({
         where: {
           title: {
-            [Op.like]: "%" + req.params.searchQuery + "%",
-          },
+            [Op.like]: "%" + req.params.searchQuery + "%"
+          }
         },
         include: [
           {
             model: models.User,
             as: "author",
-            attributes: ["username", "gravatar", "bio"],
+            attributes: ["username", "gravatar", "bio"]
           },
           {
-            model: models.Likes,
+            model: models.Likes
           },
           {
             model: models.Comments,
@@ -471,16 +470,16 @@ export default {
                   {
                     model: models.User,
                     as: "author",
-                    attributes: ["username", "gravatar", "bio"],
-                  },
-                ],
+                    attributes: ["username", "gravatar", "bio"]
+                  }
+                ]
               },
               {
                 model: models.User,
                 as: "author",
-                attributes: ["username", "gravatar", "bio"],
-              },
-            ],
+                attributes: ["username", "gravatar", "bio"]
+              }
+            ]
           },
           {
             model: models.RePosts,
@@ -488,23 +487,23 @@ export default {
               {
                 model: models.User,
                 as: "author",
-                attributes: ["username", "gravatar", "bio"],
-              },
-            ],
-          },
-        ],
+                attributes: ["username", "gravatar", "bio"]
+              }
+            ]
+          }
+        ]
       });
       let currentUser;
       currentUser = req.session && req.session.user ? req.session.user.id : 0;
 
-      posts.forEach((post) => {
+      posts.forEach(post => {
         if (post.Likes.length === 0) {
           post.setDataValue("likedByMe", false);
         }
         if (post.RePosts.length === 0) {
           post.setDataValue("RepostedByMe", false);
         }
-        post.RePosts.forEach((repost) => {
+        post.RePosts.forEach(repost => {
           const googleLogin = req.session.passport;
           if (typeof googleLogin === "object") {
             if (repost.userId === googleLogin.user.id) {
@@ -525,7 +524,7 @@ export default {
             }
           }
         });
-        post.Likes.forEach((like) => {
+        post.Likes.forEach(like => {
           // console.log(like.userId);
           if (req.user) {
             if (like.userId === req.session.passport.user.id) {
@@ -541,11 +540,11 @@ export default {
       });
       if (posts.length === 0) {
         res.status(401).send({
-          message: "No Posts Found",
+          message: "No Posts Found"
         });
       } else {
         res.status(200).send({
-          post: posts,
+          post: posts
         });
       }
     } catch (err) {
@@ -558,11 +557,11 @@ export default {
       await models.CommentReplies.destroy({
         where: {
           id: req.params.id,
-          postId: req.params.postId,
-        },
+          postId: req.params.postId
+        }
       });
       return res.status(200).send({
-        message: "Reply has been deleted",
+        message: "Reply has been deleted"
       });
     } catch (err) {
       console.log(err);
@@ -577,23 +576,23 @@ export default {
         postId: req.params.postId,
         commentId: req.params.commentId,
         userId: currentUser,
-        replyBody: req.body.replyBody,
-      }).then((reply) => {
+        replyBody: req.body.replyBody
+      }).then(reply => {
         models.CommentReplies.findOne({
           where: {
-            id: reply.id,
+            id: reply.id
           },
           include: [
             {
               model: models.User,
               as: "author",
-              attributes: ["username", "gravatar"],
-            },
-          ],
-        }).then((newReply) => {
+              attributes: ["username", "gravatar"]
+            }
+          ]
+        }).then(newReply => {
           return res.status(200).send({
             reply: newReply,
-            message: "Reply added successfully",
+            message: "Reply added successfully"
           });
         });
       });
@@ -608,8 +607,8 @@ export default {
       try {
         await models.Post.destroy({
           where: {
-            id: req.params.id,
-          },
+            id: req.params.id
+          }
         });
         return res.status(200).send("Post has been deleted!");
       } catch (error) {
@@ -626,63 +625,36 @@ export default {
     const created = await models.Likes.findOne({
       where: {
         userId: currentUser,
-        resourceId: req.params.id,
-      },
+        resourceId: req.params.id
+      }
     });
     const post = await models.Post.findOne({
       where: {
-        id: req.params.id,
+        id: req.params.id
       },
       include: [
         {
           model: models.User,
           as: "author",
-          attributes: ["username", "gravatar", "bio"],
+          attributes: ["username", "gravatar", "bio"]
         },
         // limit the likes based on the logged in user
         {
-          model: models.Likes,
-        },
-      ],
+          model: models.Likes
+        }
+      ]
     })
-      .then((newPost) => newPost)
-      .catch((err) =>
+      .then(newPost => newPost)
+      .catch(err =>
         res.status(500).send({
-          message: err,
+          message: err
         })
       );
-
-    // const [created, post] = await Promise.all([
-    //   models.Likes.findOne({
-    //     where: {
-    //       userId: currentUser,
-    //       resourceId: req.params.id
-    //     }
-    //   }),
-    //   models.Post.findOne({
-    //     where: {
-    //       id: req.params.id
-    //     },
-    //     include: [
-    //       {
-    //         model: models.User,
-    //         as: "author",
-    //         attributes: ["username", "gravatar", "bio"]
-    //       },
-    //       // limit the likes based on the logged in user
-    //       {
-    //         model: models.Likes
-    //       }
-    //     ],
-    //   }).then((newPost) => newPost).catch( (err) => res.status(500).send({
-    //     message:err,
-    //   }))
-    // ]);
 
     // no post, no updates
     if (!post) {
       return res.status(200).send({
-        message: "there is no post to be liked",
+        message: "there is no post to be liked"
       });
     }
 
@@ -692,7 +664,7 @@ export default {
       transaction = await models.sequelize.transaction();
       if (created && post) {
         return res.status(500).send({
-          message: "Something went wrong, please refresh",
+          message: "Something went wrong, please refresh"
         });
       }
       if (!created && post) {
@@ -700,7 +672,7 @@ export default {
         await models.Likes.create(
           {
             userId: currentUser,
-            resourceId: req.params.id,
+            resourceId: req.params.id
           },
           { transaction }
         );
@@ -713,7 +685,7 @@ export default {
           post.setDataValue("likedByMe", true);
         }
         if (likes) {
-          likes.forEach((like) => {
+          likes.forEach(like => {
             if (like.userId === currentUser) {
               console.log("wwdff", like);
               post.setDataValue("likedByMe", true);
@@ -724,7 +696,7 @@ export default {
 
         return res.status(200).json({
           message: "You liked this post",
-          post,
+          post
         });
       }
     } catch (err) {
@@ -741,53 +713,29 @@ export default {
     const created = await models.Likes.findOne({
       where: {
         userId: currentUser,
-        resourceId: req.params.id,
-      },
+        resourceId: req.params.id
+      }
     });
     const post = await models.Post.findOne({
       where: {
-        id: req.params.id,
+        id: req.params.id
       },
       include: [
         {
           model: models.User,
           as: "author",
-          attributes: ["username", "gravatar", "bio"],
+          attributes: ["username", "gravatar", "bio"]
         },
         // limit the likes based on the logged in user
         {
-          model: models.Likes,
-        },
-      ],
+          model: models.Likes
+        }
+      ]
     });
-    // const [created, post] = await Promise.all([
-    //   models.Likes.findOne({
-    //     where: {
-    //       userId: currentUser,
-    //       resourceId: req.params.id
-    //     }
-    //   }),
-    //   models.Post.findOne({
-    //     where: {
-    //       id: req.params.id
-    //     },
-    //     include: [
-    //       {
-    //         model: models.User,
-    //         as: "author",
-    //         attributes: ["username", "gravatar", "bio"]
-    //       },
-    //       // limit the likes based on the logged in user
-    //       {
-    //         model: models.Likes
-    //       }
-    //     ],
-    //   })
-    // ]);
     // no post, no updates
     if (!post) {
       return res.status(401).json({
-        message: "there is no post to be unliked",
+        message: "there is no post to be unliked"
       });
     }
     let transaction;
@@ -795,7 +743,7 @@ export default {
       transaction = await models.sequelize.transaction();
       if (!created && post) {
         return res.status(500).send({
-          message: "Something went wrong, please refresh",
+          message: "Something went wrong, please refresh"
         });
       }
       if (created && post) {
@@ -803,15 +751,15 @@ export default {
           {
             where: {
               userId: currentUser,
-              resourceId: req.params.id,
-            },
+              resourceId: req.params.id
+            }
           },
           { transaction }
         );
         post.decrement("likeCounts", { by: 1, transaction });
         const likes = await models.Likes.findAll();
         if (likes) {
-          likes.forEach((like) => {
+          likes.forEach(like => {
             console.log("dislike", like);
             if (like.userId === currentUser) {
               post.setDataValue("likedByMe", false);
@@ -822,7 +770,7 @@ export default {
 
         return res.status(200).json({
           message: "You unliked this post",
-          post,
+          post
         });
       }
     } catch (err) {
@@ -832,5 +780,5 @@ export default {
       console.log("There was an error", err);
       return res.status(500);
     }
-  },
+  }
 };
