@@ -22,8 +22,8 @@ const comparePassword = async (
   return isPasswordMatch;
 };
 
-const isUser = (req: any): String => {
-  let curUser: String;
+const isUser = (req: any): string => {
+  let curUser: string;
   if (req.session && req.session.user) {
     return (curUser = req.session.user.id);
   } else {
@@ -678,7 +678,7 @@ export default {
         })
         .then((user) => {
           (req.session as ISession<typeof user>).user = user;
-          req.session.save(() => {});
+          req.session.save();
           console.log(user);
           const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
             expiresIn: "1h",
