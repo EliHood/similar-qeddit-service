@@ -38,7 +38,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(
   cors({
-    origin: process.env.ALLOW_ORIGIN,
+    origin: process.env.ALLOW_ORIGIN || "http://localhost:3002",
     preflightContinue: false,
     credentials: true,
     allowedHeaders: "X-Requested-With, Content-Type, Authorization",
@@ -46,6 +46,7 @@ app.use(
     exposedHeaders: ["Content-Length", "X-Foo", "X-Bar"],
   })
 );
+// app.options("*", cors({ credentials: false })); // include before other routes
 app.use("/api/v1", apiRouter);
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -56,19 +57,6 @@ app.get("/", (req, res) => {
 // io.on("connection", function(socket: any) {
 //   console.log("a user connected");
 // });
-
-/**
- * middlewares
- */
-/* development build, use logger & simulateLatency */
-// if (process.env.NODE_ENV === "production") {
-//   app.use(logger("dev"));
-
-//   app.use("*", (req, res: Response) => {
-//     console.log(path.join(__dirname, "../../client", "build", "index.html"));
-//     res.sendFile(path.join(__dirname, "../../client", "build", "index.html"));
-//   });
-// }
 
 models.sequelize.sync().then(() => {
   httpServer.listen(PORT, () => {
