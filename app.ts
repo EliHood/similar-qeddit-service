@@ -6,14 +6,13 @@ import express from "express";
 import http from "http";
 import logger from "morgan";
 import passport from "passport";
-import "./config/passport";
 import { checkSession, useSession } from "./middlewares";
-import models from "./models/";
+import models from "./models";
 import apiRouter from "./routers";
+import "./config/passport";
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
-console.log("port", PORT);
 const app: express.Application = express();
 const httpServer = http.createServer(app);
 
@@ -71,15 +70,15 @@ app.get("/", (req, res) => {
 //   });
 // }
 
-// models.sequelize.sync().then(() => {
-httpServer.listen(PORT, () => {
-  console.log(
-    "App is running at http://localhost:%d in %s mode",
-    app.get("port"),
-    app.get("env")
-  );
-  console.log("  Press CTRL-C to stop\n");
+models.sequelize.sync().then(() => {
+  httpServer.listen(PORT, () => {
+    console.log(
+      "App is running at http://localhost:%d in %s mode",
+      app.get("port"),
+      app.get("env")
+    );
+    console.log("  Press CTRL-C to stop\n");
+  });
 });
-// });
 
 export default app;
