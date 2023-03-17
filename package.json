@@ -1,11 +1,10 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "./dist/app.js",
   "scripts": {
     "start": "concurrently --kill-others \"npm run build\" \"npm run server\"",
     "server": "nodemon ./dist/app.js",
-    "serve": "nodemon --config nodemon-config.json --inspect dist/app.js",
     "build": "tsc",
     "build:watch": "tsc --w",
     "migrate": "sequelize db:migrate",
