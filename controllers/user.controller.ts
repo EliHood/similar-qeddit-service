@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
-// import sgTransport from "nodemailer-sendgrid-transport";
 import models from "../models";
 import { Session } from "express-session";
 
