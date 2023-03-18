@@ -3,6 +3,8 @@ import fs from "fs";
 import path from "path";
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
+import { development } from "../config/config";
+
 const basename = path.basename(__filename);
 interface Db {
   Likes: any;
@@ -30,18 +32,14 @@ if (process.env.NODE_ENV === "production") {
     },
   });
 } else {
-  console.log(
-    process.env.POSTGRES_DB,
-    process.env.POSTGRES_USER,
-    process.env.POSTGRES_HOST
-  );
+  console.log(development.database, development.username, development.host);
 
   sequelize = new Sequelize(
-    process.env.POSTGRES_DB as string,
-    process.env.POSTGRES_USER as string,
-    "",
+    development.database as string,
+    development.username as string,
+    development.host as string,
     {
-      host: process.env.POSTGRES_HOST,
+      host: development.host,
       dialect: "postgres",
       pool: {
         max: 100000000,
