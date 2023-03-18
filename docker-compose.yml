@@ -6,7 +6,7 @@ services:
     image: postgres
     restart: always
     ports:
-      - "5432:5432"
+      - "8080:8080"
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: elifullstack
@@ -23,7 +23,7 @@ services:
       - POSTGRES_DB=elifullstack
       - POSTGRES_USER=eli
       - POSTGRES_PASSWORD=password
-      - POSTGRES_HOST=localhost
+      - POSTGRES_HOST=0.0.0.0
     depends_on:
       - db
     ports:
