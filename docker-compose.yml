@@ -1,27 +1,32 @@
 # docker-compose.yml
 version: "3.9"
 services:
-  postgres:
+  db:
+    container_name: db
     image: postgres
     restart: always
     ports:
       - 3030:5432
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: elifullstack
+      POSTGRES_USER: postgres
     volumes:
-      - eli-service-db:/var/lib/postgresql/data
-
-  eli-service:
+      - backend-service-db:/var/lib/postgresql/data
+  backend-service:
     build:
       context: .
+    container_name: backend-service
     environment:
       # these variables must be passed in config.json, and models/index.js
       - POSTGRES_DB=elifullstack
-      - POSTGRES_USER=postgres
+      - POSTGRES_USER=eli
       - POSTGRES_PASSWORD=password
       - POSTGRES_HOST=127.0.0.1
     depends_on:
-      - postgres
+      - db
     ports:
       - 3001:3001
 
 volumes:
-  eli-service-db:
+  backend-service-db:
