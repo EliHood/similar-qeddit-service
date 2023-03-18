@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === "production") {
   console.log(
     process.env.POSTGRES_DB,
     process.env.POSTGRES_USER,
-    process.env.PSQL_HOST
+    process.env.POSTGRES_HOST
   );
 
   sequelize = new Sequelize(
@@ -41,7 +41,7 @@ if (process.env.NODE_ENV === "production") {
     process.env.POSTGRES_USER as string,
     "",
     {
-      host: process.env.POSTGRES_HOST || "localhost",
+      host: process.env.POSTGRES_HOST,
       dialect: "postgres",
       pool: {
         max: 100000000,

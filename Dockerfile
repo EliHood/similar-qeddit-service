@@ -1,9 +1,9 @@
-FROM node:16.15-alpine3.14
+FROM node:18.14.2-alpine
 COPY . /home/app
 WORKDIR /home/app
 COPY entrypoint.sh .
-RUN yarn add bcrypt 
 COPY package.json ./
+RUN yarn add bcrypt 
 RUN yarn install
-EXPOSE 5000
+EXPOSE 3001
 CMD ["./entrypoint.sh"]

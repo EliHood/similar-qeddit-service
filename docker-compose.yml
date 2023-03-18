@@ -1,14 +1,11 @@
 # docker-compose.yml
-
 version: "3.9"
 services:
   postgres:
     image: postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+    restart: always
     ports:
-      - "5433:5433"
+      - 3030:5432
     volumes:
       - eli-service-db:/var/lib/postgresql/data
 
@@ -17,15 +14,14 @@ services:
       context: .
     environment:
       # these variables must be passed in config.json, and models/index.js
-      PSQL_HOST: database
-      PSQL_PORT: 5430
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_DB: ${POSTGRES_DB:-elifullstack}
+      - POSTGRES_DB=elifullstack
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_HOST=127.0.0.1
     depends_on:
       - postgres
     ports:
-      - "3000:3000"
+      - 3001:3001
 
 volumes:
   eli-service-db:
