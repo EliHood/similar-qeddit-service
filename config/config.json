@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "eli",
-    "password": "",
+    "username": "postgres",
+    "password": "password",
     "database": "elifullstack",
-    "host": "127.0.0.1",
+    "host": "localhost",
     "dialect": "postgres",
     "port": "5432"
   },
