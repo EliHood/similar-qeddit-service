@@ -6,6 +6,7 @@ const development = {
   password: process.env.POSTGRES_PASS,
   database: process.env.POSTGRES_DB,
   host: process.env.POSTGRES_HOST,
+  port: process.env.POSTGRES_PORT,
   dialect: "postgres",
 };
 const test = {
@@ -13,6 +14,7 @@ const test = {
   password: process.env.POSTGRES_PASS,
   database: process.env.POSTGRES_DB,
   host: process.env.POSTGRES_HOST,
+  port: process.env.POSTGRES_PORT,
   dialect: "postgres",
 };
 const production = {
@@ -20,6 +22,7 @@ const production = {
   password: process.env.POSTGRES_PASS,
   database: process.env.POSTGRES_DB,
   host: process.env.POSTGRES_HOST,
+  port: process.env.POSTGRES_PORT,
   dialect: "postgres",
 };
 

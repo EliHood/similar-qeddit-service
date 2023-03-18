@@ -32,12 +32,10 @@ if (process.env.NODE_ENV === "production") {
     },
   });
 } else {
-  console.log(development.database, development.username, development.host);
-
   sequelize = new Sequelize(
     development.database as string,
     development.username as string,
-    development.host as string,
+    development.password as string,
     {
       host: development.host,
       dialect: "postgres",
@@ -70,5 +68,7 @@ Object.keys(db).forEach((modelName) => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+db.sequelize.sync();
 
 export default db;
