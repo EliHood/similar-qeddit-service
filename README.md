@@ -1,22 +1,9 @@
-#### For executing Docker(have your env variables set up)
+### Instructions
 
-- `docker exec -it database psql -U postgres -c "CREATE DATABASE elitypescript"`
+simply replace .env_local.env to .env, and you will have the environment variables needed to run this api.
 
-- `docker-compose up --build --force-recreate`
+### For executing Docker(have your env variables set up)
 
-### login
+By default docker compose yml will read .env variables if its not set already, or you can pass environments via build like the following:
 
-`username: Caesar`
-`password: fish123`
-
-#### Docker notes on postgres(so i wont everr have to go through the pain of setting this up again lol)
-
-Once `docker-compose up` is running do
-`docker ps` from here you should see container ids.
-Find the container id for the postgres database or service name in my case its called "database". That container id will be used for the following instructions
-
-some helpful notes
-
-`docker logs` container id
-
-#### Docker Stuff
+`docker run -it -p 5432:5432 --env POSTGRES_HOST=db container name`
