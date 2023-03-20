@@ -1,5 +1,4 @@
 import * as bcrypt from "bcrypt";
-import dotenv from "dotenv";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
@@ -10,7 +9,6 @@ interface ISession<T> extends Session {
   user: T;
 }
 
-dotenv.config();
 const comparePassword = async (
   credentialsPassword: string,
   userPassword: string

@@ -1,8 +1,6 @@
-import dotenv from "dotenv";
 import passport from "passport";
 import GoogleStrategy from "passport-google-oauth20";
 import models from "../models";
-dotenv.config();
 const GoogleSta = GoogleStrategy.Strategy;
 
 passport.serializeUser((user, done) => {

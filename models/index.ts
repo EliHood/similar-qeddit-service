@@ -2,8 +2,6 @@
 import fs from "fs";
 import path from "path";
 import { Sequelize } from "sequelize";
-import dotenv from "dotenv";
-import { development } from "../config/config";
 
 const basename = path.basename(__filename);
 interface Db {
@@ -21,7 +19,6 @@ interface Db {
 }
 
 const db = {} as Db;
-dotenv.config();
 
 const {
   POSTGRES_USER,
