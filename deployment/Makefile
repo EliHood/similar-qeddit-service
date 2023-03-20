@@ -16,6 +16,10 @@ start: ## Start the application
 stop: ## Stop the application
 	docker-compose down --remove-orphans
 
+.PHONY: restart
+restart: ## Restart the application
+	make stop && make start
+
 .PHONY: help
 help: ## Show this help
 	@awk '{ if (NF == 2 && $$1 == "include") { gsub(/\$$\($(git_root_var_name)\)/, "$(git_root)", $$2) ; while ((getline line < $$2) > 0) print line ; close($$2) } else print }' \
