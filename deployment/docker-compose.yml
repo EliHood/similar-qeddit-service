@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:15.2-bullseye
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+    volumes:
+      - $PWD/postgres-data:/var/lib/postgresql/data
+  backend:
+    build: 
+      context: ..
+      dockerfile: deployment/Dockerfile
+    restart: always
+    environment:
+      # these variables must be passed in config.ts, and models/index.js
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASS: ${POSTGRES_PASS}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+    depends_on:
+      - postgres
+    ports:
+      - "3001:3001"
