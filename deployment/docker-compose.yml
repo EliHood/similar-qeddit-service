@@ -15,12 +15,6 @@ services:
       context: ..
       dockerfile: deployment/Dockerfile
     restart: always
-    environment:
-      # these variables must be passed in config.ts, and models/index.js
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASS: ${POSTGRES_PASS}
-      POSTGRES_HOST: ${POSTGRES_HOST}
     volumes:
       - $PWD/.env:/.env
     depends_on:
