@@ -25,3 +25,12 @@ services:
       - postgres
     ports:
       - "3001:3001"
+
+  nginx:
+    image: nginx:1.23.3
+    volumes:
+      - $PWD/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - backend 
+    ports:
+      - 80:80

@@ -13,4 +13,6 @@ COPY ./deployment/entrypoint.sh .
 
 EXPOSE 3001
 
+HEALTHCHECK CMD curl --fail http://0.0.0.0:3001 || exit 1  
+
 ENTRYPOINT ["./entrypoint.sh"]
