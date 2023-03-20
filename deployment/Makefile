@@ -4,6 +4,10 @@
 build-without-cache: ## Rebuild the application without cache
 	docker-compose build --no-cache
 
+.PHONY: cleanup
+cleanup: ## Remove stateful data
+	rm -rf ./postgres-data
+
 .PHONY: start
 start: ## Start the application
 	source ./.env.example && ./validate-env.sh && docker-compose up -d

@@ -1,6 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 const development = {
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASS,

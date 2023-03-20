@@ -93,8 +93,8 @@ const findUserProfile = async (username: string): Promise<any> => {
 const nodemail = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.nodemailuser,
-    pass: process.env.nodemailpass,
+    user: process.env.NODEMAIL_USER,
+    pass: process.env.NODEMAIL_PASS,
   },
 });
 export default {

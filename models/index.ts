@@ -22,34 +22,29 @@ interface Db {
 
 const db = {} as Db;
 dotenv.config();
-let sequelize;
-if (process.env.NODE_ENV === "production") {
-  sequelize = new Sequelize(process.env.DATABASE_URL as string, {
-    dialectOptions: {
-      ssl: {
-        rejectUnauthorized: false,
-      },
-    },
-  });
-} else {
-  sequelize = new Sequelize(
-    development.database as string,
-    development.username as string,
-    development.password as string,
-    {
-      host: development.host,
-      dialect: "postgres",
-      pool: {
-        max: 100000000,
-        min: 0,
 
-        idle: 20000000,
-        // @note https://github.com/sequelize/sequelize/issues/8133#issuecomment-359993057
-        acquire: 100000000,
-      },
-    }
-  );
-}
+const {
+  POSTGRES_USER,
+  POSTGRES_PASS,
+  POSTGRES_HOST,
+  POSTGRES_PORT,
+  POSTGRES_DB,
+} = process.env;
+
+const sequelize = new Sequelize(
+  `postgres://${POSTGRES_USER}:${POSTGRES_PASS}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}`,
+  {
+    pool: {
+      max: 100000000,
+      min: 0,
+
+      idle: 20000000,
+      // @note https://github.com/sequelize/sequelize/issues/8133#issuecomment-359993057
+      acquire: 100000000,
+    },
+  }
+);
+
 fs.readdirSync(__dirname)
   .filter(
     (file) =>

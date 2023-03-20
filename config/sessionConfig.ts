@@ -1,38 +1,19 @@
-import dotenv from "dotenv";
 import session from "express-session";
 import { Sequelize } from "sequelize";
 
-dotenv.config();
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
-let sequelize;
+const {
+  POSTGRES_USER,
+  POSTGRES_PASS,
+  POSTGRES_HOST,
+  POSTGRES_PORT,
+  POSTGRES_DB,
+} = process.env;
 
-if (process.env.NODE_ENV === "development") {
-  sequelize = new Sequelize(
-    process.env.POSTGRES_DB as string,
-    process.env.POSTGRES_USER as string,
-    process.env.PSQL_HOST,
-    {
-      dialect: "sqlite",
-      storage: "./session.sqlite",
-    }
-  );
-} else {
-  sequelize = new Sequelize(process.env.DATABASE_URL as string, {
-    dialect: "sqlite",
-    storage: "./session.sqlite",
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
-    },
-  });
-}
+const db = new Sequelize(`postgres://${POSTGRES_USER}:${POSTGRES_PASS}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}`);
 
-const myStore = new SequelizeStore({
-  db: sequelize,
-});
+const myStore = new SequelizeStore({ db });
 
 export interface sessionInterface {
   store: object;

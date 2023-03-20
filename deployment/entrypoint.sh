@@ -1,6 +1,8 @@
 #!/bin/sh
 set -eo pipefail
 
+source /.env
+
 npx --v
 
 # docker exec -it db psql -U postgres elifullstack

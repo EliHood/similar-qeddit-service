@@ -22,6 +22,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASS: ${POSTGRES_PASS}
       POSTGRES_HOST: ${POSTGRES_HOST}
+    volumes:
+      - $PWD/.env:/.env
     depends_on:
       - postgres
     ports:
