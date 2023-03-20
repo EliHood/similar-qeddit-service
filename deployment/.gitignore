@@ -1,5 +1,2 @@
 # We shouldn't commit Postgres data to the repo
 /postgres-data
-
-# We shouldn't commit the .env file to the repo
-/.env
