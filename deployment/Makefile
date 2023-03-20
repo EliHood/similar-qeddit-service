@@ -10,7 +10,7 @@ cleanup: ## Remove stateful data
 
 .PHONY: start
 start: ## Start the application
-	source ./.env.example && ./validate-env.sh && docker-compose up -d
+	source ../.env && ./validate-env.sh && docker-compose up -d
 
 .PHONY: stop
 stop: ## Stop the application

@@ -8,6 +8,7 @@
     "build": "npm run cleanup && tsc",
     "build:watch": "npm run cleanup && tsc --w",
     "cleanup": "rm -rf ./dist",
+    "populate-env": "source ./.env",
     "migrate": "sequelize db:migrate",
     "seed": "sequelize db:seed:all",
     "undoseed": "sequelize db:seed:undo:all",

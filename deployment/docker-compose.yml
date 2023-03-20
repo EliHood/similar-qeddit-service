@@ -9,6 +9,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
     volumes:
       - $PWD/postgres-data:/var/lib/postgresql/data
+    ports: 
+      - "5432:5432" # You don't really need to expose this port in production, but it may be convenient for debugging.
   
   backend:
     build: 
@@ -16,7 +18,9 @@ services:
       dockerfile: deployment/Dockerfile
     restart: always
     volumes:
-      - $PWD/.env:/.env
+      # The .env file is used to set environment variables for the backend.
+      # The entrypoint.sh script reads the variables from this file and make them accesible from the application.
+      - $PWD/../.env:/.env
     depends_on:
       - postgres
     ports:
