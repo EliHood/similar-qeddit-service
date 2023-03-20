@@ -27,3 +27,5 @@ git checkout develop
 ### Tips
 
 - In case you see that changes aren't apply, run `make cleanup && make build-without-cache`, then `make start` to cleanup stateful data rebuild the images. **Warning: make cleanup command will remove you database data.**
+
+- You can modify the list of required env variables here: `./validate-env.sh`. This way you'll be notified if some env variable is expected by the deployment, but missing on running the deployment.
