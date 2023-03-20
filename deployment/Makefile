@@ -14,7 +14,7 @@ start: ## Start the application
 
 .PHONY: stop
 stop: ## Stop the application
-	docker-compose down
+	docker-compose down --remove-orphans
 
 .PHONY: help
 help: ## Show this help
