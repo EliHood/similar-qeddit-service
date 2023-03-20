@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import { NextFunction, Request, Response } from "express";
 import models from "../models";
 

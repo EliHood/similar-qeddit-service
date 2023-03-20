@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import { Response } from "express";
 import sequelize from "sequelize";
 import models from "../models";
@@ -8,7 +7,6 @@ import { profanity } from "@2toad/profanity";
 
 const Op = sequelize.Op;
 
-dotenv.config();
 const filterbadWords = (word: string) => {
   let arr;
   let content;

@@ -26,3 +26,7 @@ It will reveal the ip address somewhere in the output, copy it and use it for th
 Once found ip of postgres container, we could now do the following:
 
 `docker run -p 3001:3001 -e POSTGRES_DB=elifullstack -e POSTGRES_HOST=172.17.0.2 --link postgres:postgres elihood/similar-reddit-service-docker`
+
+### Deployment
+
+See [deployment/README.md](deployment/README.md) for details.

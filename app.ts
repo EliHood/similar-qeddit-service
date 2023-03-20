@@ -1,7 +1,6 @@
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import dotenv from "dotenv";
 import express from "express";
 import http from "http";
 import logger from "morgan";
@@ -10,7 +9,6 @@ import { checkSession, useSession } from "./middlewares";
 import models from "./models";
 import apiRouter from "./routers";
 import "./config/passport";
-dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 const app: express.Application = express();

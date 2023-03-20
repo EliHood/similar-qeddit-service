@@ -1,8 +1,6 @@
-import dotenv from "dotenv";
 import passport from "passport";
 import GoogleStrategy from "passport-google-oauth20";
 import models from "../models";
-dotenv.config();
 const GoogleSta = GoogleStrategy.Strategy;
 
 passport.serializeUser((user, done) => {
@@ -23,9 +21,9 @@ passport.deserializeUser((id, done) => {
 passport.use(
   new GoogleSta(
     {
-      clientID: process.env.clientID,
-      clientSecret: process.env.clientSecret,
-      callbackURL: process.env.callbackURL,
+      clientID: process.env.PASSPORT_CLIENT_ID,
+      clientSecret: process.env.PASSPORT_CLIENT_SECRET,
+      callbackURL: process.env.PASSPORT_CALLBACK_URL,
       passReqToCallback: true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
     },
     async (req, token, refreshToken, profile, done) => {
