@@ -29,3 +29,22 @@ git checkout develop
 - In case you see that changes aren't apply, run `make start-without-cache`, to cleanup stateful data rebuild the images. **Warning: This command will remove you database data.**
 
 - You can modify the list of required env variables here: `./config/validate.sh`. This way you'll be notified if some env variable is expected by the deployment, but missing on running the deployment.
+
+## Setting up GitHub actions
+
+You need to provide following environment variables to the GitHub actions job:
+
+`DOCKER_USERNAME` - Docker Hub username
+`DOCKER_PASSWORD` - Docker Hub password
+`VM_SSH_KEY` - SSH key to access the VM
+
+In case you need to deploy new branch, you should add it a new VM host to `./deploy.sh` script:
+
+```bash
+# ...
+if [[ "${git_branch}" == "develop" ]]; then
+	vm_host="ec2-user@ec2-35-170-63-226.compute-1.amazonaws.com"
+elif [[ "${git_branch}" == "new-branch-1" ]]; then
+	vm_host="ec2-user@ec2-22-333-44-555.compute-2.amazonaws.com"
+# ...
+```
