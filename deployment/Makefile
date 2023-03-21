@@ -1,9 +1,5 @@
 .DEFAULT_GOAL := help
 
-.PHONY: build-without-cache
-build-without-cache: ## Rebuild the application without cache
-	docker-compose build --no-cache
-
 .PHONY: cleanup
 cleanup: ## Remove stateful data
 	rm -rf ./postgres-data
@@ -12,6 +8,12 @@ cleanup: ## Remove stateful data
 start: ## Start the application
 	source ../.env && ./validate-env.sh && docker-compose up -d
 
+.PHONY: start-without-cache
+start-without-cache: ## Start without build cache
+	make cleanup
+	docker-compose build --no-cache
+	make start
+
 .PHONY: stop
 stop: ## Stop the application
 	docker-compose down --remove-orphans
@@ -19,6 +21,10 @@ stop: ## Stop the application
 .PHONY: restart
 restart: ## Restart the application
 	make stop && make start
+
+.PHONY: deploy
+deploy: ## Deploy application to AWS
+	./deploy.sh
 
 .PHONY: help
 help: ## Show this help
