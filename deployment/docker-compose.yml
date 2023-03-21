@@ -23,8 +23,6 @@ services:
       - $PWD/../.env:/.env
     depends_on:
       - postgres
-    ports:
-      - "3001:3001"
 
   nginx:
     image: nginx:1.23.3
