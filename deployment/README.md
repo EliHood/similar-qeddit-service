@@ -26,6 +26,34 @@ git checkout develop
 
 ### Tips
 
-- In case you see that changes aren't apply, run `make cleanup && make build-without-cache`, then `make start` to cleanup stateful data rebuild the images. **Warning: make cleanup command will remove you database data.**
+- In case you see that changes aren't apply, run `make start-without-cache`, to cleanup stateful data rebuild the images. **Warning: This command will remove you database data.**
 
-- You can modify the list of required env variables here: `./validate-env.sh`. This way you'll be notified if some env variable is expected by the deployment, but missing on running the deployment.
+- You can modify the list of required env variables here: `./config/validate.sh`. This way you'll be notified if some env variable is expected by the deployment, but missing on running the deployment.
+
+## What CI do during deployment
+
+- It builds the Docker images and pushes it to the repo at Docker Hub.
+- Then it connects to the VM via SSH and pulls the latest image of specified branch from Docker Hub.
+- Then it restarts the containers.
+- Then it waits for the application to be available by polling the health-check endpoint.
+
+## Setting up GitHub actions
+
+You need to provide following environment variables to the GitHub actions job:
+
+- `DOCKER_USERNAME` - Docker Hub username
+- `DOCKER_PASSWORD` - Docker Hub password
+- `VM_SSH_KEY` - SSH key to access the VM
+
+[📘 Creating encrypted secrets for a repository](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+In case you need to deploy new branch, you should add it a new VM host to `./deploy.sh` script:
+
+```bash
+# ...
+if [[ "${git_branch}" == "develop" ]]; then
+	vm_host="ec2-user@ec2-35-170-63-226.compute-1.amazonaws.com"
+elif [[ "${git_branch}" == "new-branch-1" ]]; then
+	vm_host="ec2-user@ec2-22-333-44-555.compute-2.amazonaws.com"
+# ...
+```
