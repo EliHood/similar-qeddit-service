@@ -2,6 +2,7 @@
 
 .PHONY: build
 build: ## Build Docker image
+	source ./config/config.env
 	./build.sh
 
 .PHONY: push
