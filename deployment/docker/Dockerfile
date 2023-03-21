@@ -9,7 +9,7 @@ COPY yarn.lock .
 RUN yarn install
 
 COPY . .
-COPY ./deployment/entrypoint.sh .
+COPY ./deployment/docker/entrypoint.sh .
 
 EXPOSE 3001
 

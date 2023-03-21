@@ -6,7 +6,16 @@ cleanup: ## Remove stateful data
 
 .PHONY: start
 start: ## Start the application
-	source ../.env && ./validate-env.sh && docker-compose up -d
+	./commands/start.sh
+
+.PHONY: stop
+stop: ## Stop the application
+	./commands/stop.sh
+
+.PHONY: restart
+restart: ## Restart the application
+	make stop 
+	make start
 
 .PHONY: start-without-cache
 start-without-cache: ## Start without build cache
@@ -14,16 +23,8 @@ start-without-cache: ## Start without build cache
 	docker-compose build --no-cache
 	make start
 
-.PHONY: stop
-stop: ## Stop the application
-	docker-compose down --remove-orphans
-
-.PHONY: restart
-restart: ## Restart the application
-	make stop && make start
-
 .PHONY: deploy
-deploy: ## Deploy application to AWS
+deploy: ## Deploy application to VM
 	./deploy.sh
 
 .PHONY: help

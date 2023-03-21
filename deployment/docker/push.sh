@@ -3,10 +3,10 @@
 set -eo pipefail
 
 script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-docker_tag=$($script_dir/get-docker-tag.sh)
+docker_image=$($script_dir/get-docker-image.sh)
 
 $script_dir/login.sh
 
-echo "Pushing docker image $docker_tag"
+echo "Pushing docker image $docker_image"
 
-docker push $docker_tag
+docker push $docker_image

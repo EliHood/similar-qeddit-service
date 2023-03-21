@@ -13,9 +13,7 @@ services:
       - "5432:5432" # You don't really need to expose this port in production, but it may be convenient for debugging.
   
   backend:
-    build: 
-      context: ..
-      dockerfile: deployment/docker/Dockerfile
+    image: ${BACKEND_DOCKER_IMAGE}
     restart: always
     volumes:
       # The .env file is used to set environment variables for the backend.
