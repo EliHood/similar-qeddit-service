@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -xeo pipefail
+set -eo pipefail
 
 script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $script_dir/config/config.env
@@ -38,7 +38,7 @@ vm_command_populate_env="cd ${VM_GIT_ROOT} && source ./deployment/config/populat
 vm_command_pull_latest_changes="cd $VM_GIT_ROOT && git reset --hard HEAD && git checkout $git_branch && git pull origin $git_branch"
 vm_command_restart_docker_compose="cd $VM_GIT_ROOT/deployment && docker-compose pull && make restart"
 vm_command_docker_prune="docker image prune -f"
-vm_commands="set -x; ${vm_command_populate_env} && ${vm_command_pull_latest_changes} && ${vm_command_restart_docker_compose} && ${vm_command_docker_prune}"
+vm_commands="${vm_command_populate_env} && ${vm_command_pull_latest_changes} && ${vm_command_restart_docker_compose} && ${vm_command_docker_prune}"
 
 ssh -i ~/.ssh/vm_ssh_key -o "StrictHostKeyChecking=no" "${vm_host}" "$vm_commands"
 
