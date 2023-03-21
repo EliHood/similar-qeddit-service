@@ -30,6 +30,6 @@ echo "Running deployment commands on VM"
 vm_git_root="~/similar-reddit-service"
 vm_command_pull_latest_changes="cd $vm_git_root && git reset --hard HEAD && git checkout $git_branch && git pull"
 vm_command_restart_docker_compose="cd $vm_git_root/deployment && make restart"
-vm_commands="${vm_command_pull_latest_changes} && ${vm_command_restart_docker_compose}}"
+vm_commands="${vm_command_pull_latest_changes} && ${vm_command_restart_docker_compose}"
 
 ssh -i ~/.ssh/vm_ssh_key -o "StrictHostKeyChecking=no" "${vm_host}" "$vm_commands"
