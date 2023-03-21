@@ -2,11 +2,12 @@
 
 .PHONY: build
 build: ## Build Docker image
-	source ./config/config.env
+	source ../config/config.env
 	./build.sh
 
 .PHONY: push
 push: ## Push Docker image to the registry
+	source ../config/config.env
 	./push.sh
 
 .PHONY: help
