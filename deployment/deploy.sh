@@ -2,6 +2,9 @@
 
 set -eo pipefail
 
+script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source $script_dir/config/populate.sh
+
 git_branch=$(git rev-parse --abbrev-ref HEAD)
 
 echo "Deploying the current branch \"${git_branch}\" to AWS"
