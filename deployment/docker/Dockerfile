@@ -15,4 +15,14 @@ EXPOSE 3001
 
 HEALTHCHECK CMD curl --fail http://0.0.0.0:3001 || exit 1  
 
+# Accept build arguments for build metadata and Set build metadata as environment variables.
+# It's useful when we need to determine which version of the app is running.
+ARG BUILD_BRANCH
+ARG BUILD_REV
+ARG BUILD_TIME
+
+ENV BUILD_BRANCH=${BUILD_BRANCH}
+ENV BUILD_REV=${BUILD_REV}
+ENV BUILD_TIME=${BUILD_TIME}
+
 ENTRYPOINT ["./entrypoint.sh"]

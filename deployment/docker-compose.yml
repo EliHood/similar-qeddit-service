@@ -18,7 +18,7 @@ services:
     volumes:
       # The .env file is used to set environment variables for the backend.
       # The entrypoint.sh script reads the variables from this file and make them accesible from the application.
-      - $PWD/../.env:/.env
+      - $PWD/../.env:/app/.env
     depends_on:
       - postgres
 

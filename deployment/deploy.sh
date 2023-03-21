@@ -29,7 +29,23 @@ echo "Running deployment commands on VM"
 
 vm_git_root="~/similar-reddit-service"
 vm_command_pull_latest_changes="cd $vm_git_root && git reset --hard HEAD && git checkout $git_branch && git pull"
-vm_command_restart_docker_compose="cd $vm_git_root/deployment && make restart"
+vm_command_restart_docker_compose="cd $vm_git_root/deployment && docker-compose pull && make restart"
 vm_commands="${vm_command_pull_latest_changes} && ${vm_command_restart_docker_compose}"
 
 ssh -i ~/.ssh/vm_ssh_key -o "StrictHostKeyChecking=no" "${vm_host}" "$vm_commands"
+
+function test_deployment() {
+	test_url="http://${vm_host}/api/v1/health"
+
+	echo "Awaiting deployment at ${test_url} to be ready"
+
+	curl --fail \
+		--retry-all-errors \
+		--retry 100 \
+		--retry-delay 0 \
+		--retry-max-time 120 "${test_url}"
+
+	echo "Deployment is ready at ${vm_host}"
+}
+
+test_deployment

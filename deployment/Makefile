@@ -4,6 +4,10 @@
 cleanup: ## Remove stateful data
 	rm -rf ./postgres-data
 
+.PHONY: build
+build: ## Build Docker images
+	cd ./docker && make build
+
 .PHONY: start
 start: ## Start the application
 	./commands/start.sh
