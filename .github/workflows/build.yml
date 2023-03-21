@@ -7,6 +7,9 @@ jobs:
       matrix:
         include:
           - runs-on: ubuntu-latest
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     runs-on: ${{matrix.runs-on}}
 
