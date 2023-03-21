@@ -34,9 +34,9 @@ git checkout develop
 
 You need to provide following environment variables to the GitHub actions job:
 
-`DOCKER_USERNAME` - Docker Hub username
-`DOCKER_PASSWORD` - Docker Hub password
-`VM_SSH_KEY` - SSH key to access the VM
+- `DOCKER_USERNAME` - Docker Hub username
+- `DOCKER_PASSWORD` - Docker Hub password
+- `VM_SSH_KEY` - SSH key to access the VM
 
 [📘 Creating encrypted secrets for a repository](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
