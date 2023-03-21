@@ -6,11 +6,14 @@ git_branch=$(git rev-parse --abbrev-ref HEAD)
 
 echo "Deploying the current branch \"${git_branch}\" to AWS"
 
+vars="VM_SSH_KEY VM_GIT_ROOT"
 function validate_env() {
-	if [[ -z "${VM_SSH_KEY}" ]]; then
-		echo "VM_SSH_KEY environment variable is not set"
-		exit 1
-	fi
+	for var in $vars; do
+		if [ -z "${!var}" ]; then
+			echo "ERROR: $var is not set"
+			exit 1
+		fi
+	done	
 }
 
 validate_env
