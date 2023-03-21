@@ -15,4 +15,4 @@ git describe --tags --exact-match "$git_revision" &>/dev/null && \
   docker_tag=$( generate_docker_tag "$( git describe --tags --exact-match $git_revision )" ) || \
   docker_tag=$( generate_docker_tag "$( git rev-parse --abbrev-ref HEAD )" )
 
-echo "$docker_tag"
+echo "visortelle/temp-elijah:$docker_tag"
