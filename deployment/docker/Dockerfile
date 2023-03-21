@@ -15,7 +15,7 @@ RUN yarn build
 
 EXPOSE 3001
 
-HEALTHCHECK CMD curl --fail http://0.0.0.0:3001/api/v1/health || exit 1  
+HEALTHCHECK CMD curl --fail http://0.0.0.0:3001/api/v1/health || exit 1
 
 # Accept build arguments for build metadata and Set build metadata as environment variables.
 # It's useful when we need to determine which version of the app is running.
