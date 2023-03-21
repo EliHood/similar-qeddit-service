@@ -30,6 +30,13 @@ git checkout develop
 
 - You can modify the list of required env variables here: `./config/validate.sh`. This way you'll be notified if some env variable is expected by the deployment, but missing on running the deployment.
 
+## What CI do during deployment
+
+- It builds the Docker images and pushes it to the repo at Docker Hub.
+- Then it connects to the VM via SSH and pulls the latest image of specified branch from Docker Hub.
+- Then it restarts the containers.
+- Then it waits for the application to be available by polling the health-check endpoint.
+
 ## Setting up GitHub actions
 
 You need to provide following environment variables to the GitHub actions job:
