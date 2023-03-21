@@ -12,7 +12,7 @@ source $git_root/.env
 source $script_dir/config.env
 
 # Set Docker image to use
-export BACKEND_DOCKER_IMAGE=$(./docker/get-docker-image.sh)
+export BACKEND_DOCKER_IMAGE=$("${script_dir}/../docker/get-docker-image.sh")
 
 # Validate configuration
 $script_dir/validate.sh
