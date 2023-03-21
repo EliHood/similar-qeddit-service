@@ -10,6 +10,7 @@ jobs:
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      VM_SSH_KEY: ${{ secrets.VM_SSH_KEY }}
 
     runs-on: ${{matrix.runs-on}}
 
