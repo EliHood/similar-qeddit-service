@@ -10,10 +10,10 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
   console.log(id);
   models.User.findOne({ id })
-    .then(usr => {
+    .then((usr) => {
       return done(null, usr);
     })
-    .catch(err => {
+    .catch((err) => {
       done(err);
     });
 });
@@ -24,25 +24,24 @@ passport.use(
       clientID: process.env.PASSPORT_CLIENT_ID,
       clientSecret: process.env.PASSPORT_CLIENT_SECRET,
       callbackURL: process.env.PASSPORT_CALLBACK_URL,
-      passReqToCallback: true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+      passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a user is logged in or not)
     },
     async (req, token, refreshToken, profile, done) => {
       console.log(profile);
       models.User.findOne({ where: { googleId: profile.id } }).then(
-        async userExist => {
+        async (userExist) => {
           if (userExist) {
             return done(null, userExist);
           } else {
             try {
-              console.log("test", profile);
               return models.User.create({
                 googleId: profile.id,
                 username: profile.displayName
                   ? profile.displayName
-                  : profile.emails[0].value,
+                  : profile.emails[0].value.split("@")[0],
                 gravatar: profile.photos[0].value,
-                email: profile.emails[0].value
-              }).then(user => {
+                email: profile.emails[0].value,
+              }).then((user) => {
                 return done(null, user);
               });
             } catch (err) {
