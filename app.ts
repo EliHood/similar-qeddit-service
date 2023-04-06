@@ -27,6 +27,12 @@ if (process.env.NODE_ENV === "development") {
 
 app.set("port", PORT);
 
+app.use(
+  cors({
+    origin: process.env.ALLOW_ORIGIN || "http://localhost:3002"
+  })
+);
+
 app.use(cookieParser());
 app.use(bodyParser.json({ limit: "5mb" }));
 app.use(bodyParser.urlencoded({ limit: "5mb", extended: true }));
@@ -34,16 +40,6 @@ app.use(useSession());
 app.use(checkSession());
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(
-  cors({
-    origin: process.env.ALLOW_ORIGIN || "http://localhost:3002",
-    preflightContinue: false,
-    credentials: true,
-    allowedHeaders: "X-Requested-With, Content-Type, Authorization",
-    methods: "GET, POST, PATCH, PUT, POST, DELETE, OPTIONS",
-    exposedHeaders: ["Content-Length", "X-Foo", "X-Bar"],
-  })
-);
 // app.options("*", cors({ credentials: false })); // include before other routes
 app.use("/api/v1", apiRouter);
 app.get("/", (req, res) => {
